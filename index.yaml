@@ -3,20 +3,20 @@ entries:
   konga:
   - apiVersion: v1
     appVersion: 0.14.9
-    created: "2020-10-07T17:22:31.832105-03:00"
-    description: A Helm chart for Kubernetes
-    digest: a538d46a28eac3e6fa1a4b04140aca74dce16f7e1f66a07609e0f6c8b7cd608a
+    created: "2020-10-07T17:33:25.908601-03:00"
+    description: Kong helm chart
+    digest: 8cedc1687b0cff25c6044205f450d84ed7566b57bad875a0d18d68435a090e9d
     name: konga
     urls:
     - https://charts.bennu.cl/konga-1.0.1.tgz
     version: 1.0.1
   - apiVersion: v1
     appVersion: "1.0"
-    created: "2020-10-07T17:22:31.831436-03:00"
+    created: "2020-10-07T17:33:25.907991-03:00"
     description: A Helm chart for Kubernetes
     digest: 7a86b10611be170bb9bda34cac62a78b9aa501de9d44dd8e965144297757b1f1
     name: konga
     urls:
     - https://charts.bennu.cl/konga-1.0.0.tgz
     version: 1.0.0
-generated: "2020-10-07T17:22:31.830541-03:00"
+generated: "2020-10-07T17:33:25.907083-03:00"
