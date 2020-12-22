@@ -1,6 +1,6 @@
-{{- if .Values.ingress.enabled -}}
-{{- $fullName := include "php-fpm.fullname" . -}}
-{{- $svcPort := .Values.service.port -}}
+{{- if .Values.php-fpm.ingress.enabled -}}
+{{- $fullName := include "php-fpm.fullname" . -}} #Cambiar
+{{- $svcPort := .Values.php-fpm.service.port -}}
 {{- if semverCompare ">=1.14-0" .Capabilities.KubeVersion.GitVersion -}}
 apiVersion: networking.k8s.io/v1beta1
 {{- else -}}
@@ -10,15 +10,15 @@ kind: Ingress
 metadata:
   name: {{ $fullName }}
   labels:
-    {{- include "php-fpm.labels" . | nindent 4 }}
+    {{- include "php-fpm.labels" . | nindent 4 }} #Cambiar
   {{- with .Values.ingress.annotations }}
   annotations:
     {{- toYaml . | nindent 4 }}
   {{- end }}
 spec:
-  {{- if .Values.ingress.tls }}
+  {{- if .Values.php-fpm.ingress.tls }}
   tls:
-    {{- range .Values.ingress.tls }}
+    {{- range .Values.php-fpm.ingress.tls }}
     - hosts:
         {{- range .hosts }}
         - {{ . | quote }}
@@ -27,7 +27,7 @@ spec:
     {{- end }}
   {{- end }}
   rules:
-    {{- range .Values.ingress.hosts }}
+    {{- range .Values.php-fpm.ingress.hosts }}
     - host: {{ .host | quote }}
       http:
         paths:

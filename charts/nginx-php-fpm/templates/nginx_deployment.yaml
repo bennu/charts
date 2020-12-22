@@ -1,0 +1,77 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "nginx.fullname" . }} #Cambiar
+  labels:
+    {{- include "nginx.labels" . | nindent 4 }} #Cambiar
+spec:
+  {{- if not .Values.nginx.autoscaling.enabled }} 
+  replicas: {{ .Values.nginx.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      app: {{ include "nginx.fullname" . }} #Cambiar
+      {{- include "nginx.selectorLabels" . | nindent 6 }} #Cambiar
+  template:
+    metadata:
+      {{- with .Values.nginx.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        app: {{ include "nginx.fullname" . }} #Cambiar
+        {{- include "nginx.selectorLabels" . | nindent 8 }} #Cambiar
+    spec:
+      {{- with .Values.nginx.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "nginx.serviceAccountName" . }} #Cambiar
+      securityContext:
+        {{- toYaml .Values.nginx.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }} #Cambiar
+          securityContext:
+            {{- toYaml .Values.nginx.securityContext | nindent 12 }}
+          image: "{{ .Values.nginx.image.repository }}:{{ .Values.nginx.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.nginx.image.pullPolicy }}
+          env:
+            - name: WEB_ROOT
+              value: /www
+            - name: PHP_SERVICE
+              value: {{ .Values.nginx.environment.php.name }}
+            - name: PHP_SERVICE_PORT
+              value: {{ .Values.nginx.environment.php.port }}
+          ports:
+            - name: {{ .Values.nginx.ports.name }}
+              containerPort: {{ .Values.nginx.ports.containerPort }}
+          volumeMounts:
+            - mountPath: /www
+              name: {{ .Values.nginx.volume.name }}
+              readOnly: false
+          #livenessProbe:
+          #  httpGet:
+          #    path: /
+          #    port: http
+          #readinessProbe:
+          #  httpGet:
+          #    path: /
+          #    port: http
+          resources:
+            {{- toYaml .Values.nginx.resources | nindent 12 }}
+      volumes:
+        - name: {{ .Values.nginx.volume.name }}
+          persistentVolumeClaim:
+            claimName: {{ .Values.nginx.volume.claim.name }}
+      {{- with .Values.nginx.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.nginx.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.nginx.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

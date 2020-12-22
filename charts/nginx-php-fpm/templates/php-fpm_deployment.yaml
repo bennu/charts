@@ -1,0 +1,89 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "php-fpm.fullname" . }} #Cambiar
+  labels:
+    {{- include "php-fpm.labels" . | nindent 4 }} #Cambiar
+spec:
+  {{- if not .Values.php-fpm.autoscaling.enabled }}
+  replicas: {{ .Values.php-fpm.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      app: {{ include "php-fpm.fullname" . }} #Cambiar
+      {{- include "php-fpm.selectorLabels" . | nindent 6 }} #Cambiar
+  template:
+    metadata:
+      {{- with .Values.php-fpm.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        app: {{ include "php-fpm.fullname" . }} #Cambiar
+        {{- include "php-fpm.selectorLabels" . | nindent 8 }} #Cambiar
+    spec:
+      {{- with .Values.php-fpm.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "php-fpm.serviceAccountName" . }} #Cambiar
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }} #Cambiar
+          securityContext:
+            {{- toYaml .Values.php-fpm.securityContext | nindent 12 }}
+          image: "{{ .Values.php-fpm.image.repository }}:{{ .Values.php-fpm.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.php-fpm.image.pullPolicy }}
+          env:
+            - name: WEB_ROOT
+              value: /www
+            - name: DB_USER
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.php-fpm.environment.database.secret.name }}
+                  key: username
+            - name: DB_PASS
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.php-fpm.environment.database.secret.name }}
+                  key: password
+            - name: DB_URL
+              value: {{ .Values.php-fpm.environment.database.url }}
+            - name: DB_PORT
+              value: {{ .Values.php-fpm.environment.database.port }}
+            - name: DB_NAME
+              value: {{ .Values.php-fpm.environment.database.name }}
+          ports:
+            - name: {{ .Values.php-fpm.ports.name }}
+              containerPort: {{ .Values.php-fpm.ports.containerPort }}
+          volumeMounts:
+            - mountPath: /www
+              name: {{ .Values.php-fpm.volume.name }}
+              readOnly: false
+          #livenessProbe:
+          #  httpGet:
+          #    path: /
+          #    port: http
+          #readinessProbe:
+          #  httpGet:
+          #    path: /
+          #    port: http
+          resources:
+            {{- toYaml .Values.php-fpm.resources | nindent 12 }}
+      volumes:
+        - name: {{ .Values.php-fpm.volume.name }}
+          persistentVolumeClaim:
+            claimName: {{ .Values.php-fpm.volume.claim.name }}
+      {{- with .Values.php-fpm.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.php-fpm.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.php-fpm.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

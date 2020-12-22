@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "nginx.fullname" . }} #Cambiar
+  labels:
+    {{- include "nginx.labels" . | nindent 4 }} #Cambiar
+spec:
+  type: {{ .Values.nginx.service.type }}
+  ports:
+    - port: {{ .Values.nginx.service.port }}
+      targetPort: {{ .Values.nginx.service.targetPortv}}
+      protocol: TCP
+      #name: http
+  selector:
+    app: {{ include "nginx.fullname" . }} #Cambiar
+    {{- include "nginx.selectorLabels" . | nindent 4 }} #Cambiar

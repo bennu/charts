@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "php-fpm.fullname" . }} #Cambiar
+  labels:
+    {{- include "php-fpm.labels" . | nindent 4 }} #Cambiar
+spec:
+  type: {{ .Values.php-fpm.service.type }}
+  ports:
+    - port: {{ .Values.php-fpm.service.port }}
+      targetPort: {{ .Values.php-fpm.service.targetPort }}
+      protocol: TCP
+      #name: http
+  selector:
+    app: {{ include "php-fpm.fullname" . }} #Cambiar
+    {{- include "php-fpm.selectorLabels" . | nindent 4 }} #Cambiar
