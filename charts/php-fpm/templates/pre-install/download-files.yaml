@@ -1,0 +1,48 @@
+apiVersion: batch/v1
+kind: job
+metadata:
+  name: {{ .Values.pre-install.download-files.name }}
+  annotations:
+    "helm.sh/hook": pre-install
+    "helm.sh/hook-weight": "1"
+    "helm.sh/hook-delete-policy": before-hook-creation ,hook-success
+spec:
+  template:
+    metadata:
+      name: {{ .Values.pre-install.download-files.name }}
+    spec:
+      containers:
+        - image: "{{ .Values.pre-install.download-files.image.repository }}:{{ .Values.pre-install.download-files.image.tag }}"
+          name: {{ .Values.pre-install.download-files.name }}
+          command: ["/bin/bash"]
+          args:
+            - -c
+            - >-
+              cd /wwww &&
+              mc alias set minio ${MINIO_URL} ${MINIO_USER} ${MINIO_PASS} &&
+              mc cp ${FILES_ROUTE}
+          imagePullPolicy: {{ .Values.pre-install.download-files.pullPolicy }}
+          volumeMounts:
+            - mountPath: /wwww
+              name: {{ .Values.volume.name }}
+              readOnly: false
+          env:
+            - name: MINIO_URL
+              value: {{ .Values.pre-install.download-files.environment.minio-url }}
+            - name: MINIO_USER
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.pre-install.download-files.environment.secret.name }}
+                  key: username
+            - name: MINIO_PASS
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.pre-install.download-files.environment.secret.name }}
+                  key: password
+            - name: FILES_ROUTE
+              value: {{ .Values.pre-install.download-files.environment.files-route }}
+      restartPolicy: never
+      volumes:
+        - name: {{ .Value.volume.name }}
+          persistentVolumeClaim:
+            claimName: {{ .Value.volume.claim.name }}         

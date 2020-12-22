@@ -1,0 +1,59 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{}}
+  annotations:
+    "helm.sh/hook": pre-install
+    "helm.sh/hook-weight": "1"
+    "helm.sh/hook-delete-policy": before-hook-creation ,hook-success
+spec:
+  template:
+    metadata:
+      name: {{}}
+    spec:
+      containers:
+        image: "{{}}:{{}}"
+        name: {{}}
+        command: ["/bin/bash"]
+        args:
+          - -c
+          - >-
+            cd /wwww/web &&
+            sudo www-data ../vendor/drush/drush/drush cr 
+        imagePullPolicy: {{}}
+        env:
+          - name: DRUPAL_USER
+            valueFrom:
+              secretKeyRef:
+                name: {{}}
+                key: username
+          - name: DRUPAL_PASS
+            valueFrom:
+              secretKeyRef:
+                name: {{}}
+                key: password
+          - name: DB_USER
+            valueFrom:
+              secretKeyRef:
+                name: {{}}
+                key: username
+          - name: DB_PASS
+            valueFrom:
+              secretKeyRef:
+                name: {{}}
+                key: password
+          - name: DB_URL
+            value: {{}}
+          - name: DB_PORT
+            value: {{}}
+          - name: DB_NAME
+            value: {{}}
+        volumeMounts:
+          - mountPath: /www
+            name: {{}}
+            readOnly: false
+      restartPolicy: never
+      volumes:
+        - name: {{}}
+          persistentVolumeClaim:
+            claimName: {{}}      

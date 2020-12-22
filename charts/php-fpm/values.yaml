@@ -35,6 +35,20 @@ volume:
     name: drupal-volume-claim
 
 
+pre-install:
+  download-files:
+    name: files-drupal
+    image:
+      repository: minio/mc
+      tag: RELEASE.2020-21-18T10-53-53Z
+      pullPolicy: IfNotPresent
+    environment:
+      minio-url: https://minio.cepal.org/
+      files-route: minio/drupal/files.tar.gz
+      secret:
+        name: minio-credentials
+
+
 serviceAccount:
   # Specifies whether a service account should be created
   create: true
