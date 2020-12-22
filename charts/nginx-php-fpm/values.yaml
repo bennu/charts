@@ -1,7 +1,34 @@
 # Default values for php-fpm.
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
-php-fpm:
+
+volume:
+    name: drupal-storage
+    claim:
+      name: drupal-volume-claim
+
+preInstall:
+  downloadFiles:
+    name: files-drupal
+    image:
+      repository: minio/mc
+      tag: RELEASE.2020-21-18T10-53-53Z
+      pullPolicy: IfNotPresent
+    environment:
+      minioUrl: https://minio.cepal.org/
+      filesRoute: minio/drupal/files.tar.gz
+      secret:
+        name: minio-credentials
+
+postInstall:
+  migrateDrupal:
+    name: migration-drupal
+    image:
+      repository: bennu/php-cli
+      tag: testv2
+      pullPolicy: IfNotPresent
+
+phpFpm:
   replicaCount: 1
 
   image:
@@ -13,10 +40,24 @@ php-fpm:
   imagePullSecrets: [
     name: image-pull
   ]
-  nameOverride: "php-fpm"
-  fullnameOverride: "php-fpm"
 
+  labels: [
+    app: php-fpm,
+    tier: backend,
+    track: stable,
+  ]
 
+  selectors: [
+    app: php-fpm,
+    tier: backend,
+  ]
+
+  matchLabels: [
+    app: php-fpm
+  ]
+
+  name: "php-fpm"
+  
   environment:
     database:
       name: d8t
@@ -34,23 +75,9 @@ php-fpm:
     claim:
       name: drupal-volume-claim
 
-
-  pre-install:
-    download-files:
-      name: files-drupal
-      image:
-        repository: minio/mc
-        tag: RELEASE.2020-21-18T10-53-53Z
-        pullPolicy: IfNotPresent
-      environment:
-        minio-url: https://minio.cepal.org/
-        files-route: minio/drupal/files.tar.gz
-        secret:
-          name: minio-credentials
-
   serviceAccount:
     # Specifies whether a service account should be created
-    create: true
+    create: false
     # Annotations to add to the service account
     annotations: {}
     # The name of the service account to use.
@@ -125,8 +152,23 @@ nginx:
   imagePullSecrets: [
     name: image-pull
   ]
-  nameOverride: ""
-  fullnameOverride: "nginx"
+
+  labels: [
+    app: nginx,
+    tier: frontend,
+    track: stable,
+  ]
+
+  selectors: [
+    app: nginx,
+    tier: frontend,
+  ]
+
+  matchLabells: [
+    app: nginx
+  ]
+
+  name: "nginx"
 
   environment:
     php:
@@ -137,14 +179,9 @@ nginx:
     containerPort: 80
     name: http
 
-  volume:
-    name: drupal-storage
-    claim:
-      name: drupal-volume-claim
-
   serviceAccount:
     # Specifies whether a service account should be created
-    create: true
+    create: false
     # Annotations to add to the service account
     annotations: {}
     # The name of the service account to use.

@@ -2,14 +2,16 @@
 apiVersion: autoscaling/v2beta1
 kind: HorizontalPodAutoscaler
 metadata:
-  name: {{ include "nginx.fullname" . }} #Cambiar
+  name: {{ .Values.nginx.name }}
   labels:
-    {{- include "nginx.labels" . | nindent 4 }} #Cambiar
+    app: nginx
+    tier: frontend
+    track: stable
 spec:
   scaleTargetRef:
     apiVersion: apps/v1
     kind: Deployment
-    name: {{ include "nginx.fullname" . }} #Cambiar
+    name: {{ .Values.nginx.name }} 
   minReplicas: {{ .Values.nginx.autoscaling.minReplicas }}
   maxReplicas: {{ .Values.nginx.autoscaling.maxReplicas }}
   metrics:

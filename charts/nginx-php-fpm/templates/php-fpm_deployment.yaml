@@ -1,65 +1,67 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "php-fpm.fullname" . }} #Cambiar
-  labels:
-    {{- include "php-fpm.labels" . | nindent 4 }} #Cambiar
+  name: {{ .Values.phpFpm.name }}
+  annotations:
+    "helm.sh/hook-weight": "1"
 spec:
-  {{- if not .Values.php-fpm.autoscaling.enabled }}
-  replicas: {{ .Values.php-fpm.replicaCount }}
+  {{- if not .Values.phpFpm.autoscaling.enabled }}
+  replicas: {{ .Values.phpFpm.replicaCount }}
   {{- end }}
   selector:
     matchLabels:
-      app: {{ include "php-fpm.fullname" . }} #Cambiar
-      {{- include "php-fpm.selectorLabels" . | nindent 6 }} #Cambiar
+      app: php-fpm
   template:
     metadata:
-      {{- with .Values.php-fpm.podAnnotations }}
+      {{- with .Values.phpFpm.podAnnotations }}
       annotations:
-        {{- toYaml . | nindent 8 }}
+        {{ toYaml . | nindent 8 }}
       {{- end }}
       labels:
-        app: {{ include "php-fpm.fullname" . }} #Cambiar
-        {{- include "php-fpm.selectorLabels" . | nindent 8 }} #Cambiar
+        app: php-fpm
+        tier: bakcned
+        track: stable
     spec:
-      {{- with .Values.php-fpm.imagePullSecrets }}
+      {{- with .Values.phpFpm.imagePullSecrets }}
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      serviceAccountName: {{ include "php-fpm.serviceAccountName" . }} #Cambiar
+      {{- if .Values.phpFpm.serviceAccount.create }}
+      serviceAccountName: {{ .Values.phpFpm.serviceAccount.name }}
+      {{- end}}
       securityContext:
-        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+        {{- toYaml .Values.phpFpm.podSecurityContext | nindent 8 }}
       containers:
-        - name: {{ .Chart.Name }} #Cambiar
+        - name: {{ .Values.phpFpm.name }} 
           securityContext:
-            {{- toYaml .Values.php-fpm.securityContext | nindent 12 }}
-          image: "{{ .Values.php-fpm.image.repository }}:{{ .Values.php-fpm.image.tag | default .Chart.AppVersion }}"
-          imagePullPolicy: {{ .Values.php-fpm.image.pullPolicy }}
+            {{- toYaml .Values.phpFpm.securityContext | nindent 12 }}
+          image: "{{ .Values.phpFpm.image.repository }}:{{ .Values.phpFpm.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.phpFpm.image.pullPolicy }}
           env:
             - name: WEB_ROOT
               value: /www
             - name: DB_USER
               valueFrom:
                 secretKeyRef:
-                  name: {{ .Values.php-fpm.environment.database.secret.name }}
+                  name: {{ .Values.phpFpm.environment.database.secret.name }}
                   key: username
             - name: DB_PASS
               valueFrom:
                 secretKeyRef:
-                  name: {{ .Values.php-fpm.environment.database.secret.name }}
+                  name: {{ .Values.phpFpm.environment.database.secret.name }}
                   key: password
             - name: DB_URL
-              value: {{ .Values.php-fpm.environment.database.url }}
+              value: {{ .Values.phpFpm.environment.database.url }}
             - name: DB_PORT
-              value: {{ .Values.php-fpm.environment.database.port }}
+              value: {{ .Values.phpFpm.environment.database.port }}
             - name: DB_NAME
-              value: {{ .Values.php-fpm.environment.database.name }}
+              value: {{ .Values.phpFpm.environment.database.name }}
           ports:
-            - name: {{ .Values.php-fpm.ports.name }}
-              containerPort: {{ .Values.php-fpm.ports.containerPort }}
+            - name: {{ .Values.phpFpm.ports.name }}
+              containerPort: {{ .Values.phpFpm.ports.containerPort }}
           volumeMounts:
             - mountPath: /www
-              name: {{ .Values.php-fpm.volume.name }}
+              name: {{ .Values.volume.name }}
               readOnly: false
           #livenessProbe:
           #  httpGet:
@@ -70,20 +72,20 @@ spec:
           #    path: /
           #    port: http
           resources:
-            {{- toYaml .Values.php-fpm.resources | nindent 12 }}
+            {{- toYaml .Values.phpFpm.resources | nindent 12 }}
       volumes:
-        - name: {{ .Values.php-fpm.volume.name }}
+        - name: {{ .Values.volume.name }}
           persistentVolumeClaim:
-            claimName: {{ .Values.php-fpm.volume.claim.name }}
-      {{- with .Values.php-fpm.nodeSelector }}
+            claimName: {{ .Values.volume.claim.name }}
+      {{- with .Values.phpFpm.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- with .Values.php-fpm.affinity }}
+      {{- with .Values.phpFpm.affinity }}
       affinity:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- with .Values.php-fpm.tolerations }}
+      {{- with .Values.phpFpm.tolerations }}
       tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}

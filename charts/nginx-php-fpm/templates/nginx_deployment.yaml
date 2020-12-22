@@ -1,17 +1,16 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "nginx.fullname" . }} #Cambiar
-  labels:
-    {{- include "nginx.labels" . | nindent 4 }} #Cambiar
+  name: {{ .Values.nginx.name }}
+  annotations:
+    "helm.sh/hook-weight": "2"
 spec:
   {{- if not .Values.nginx.autoscaling.enabled }} 
   replicas: {{ .Values.nginx.replicaCount }}
   {{- end }}
   selector:
     matchLabels:
-      app: {{ include "nginx.fullname" . }} #Cambiar
-      {{- include "nginx.selectorLabels" . | nindent 6 }} #Cambiar
+      app: {{ .Values.nginx.name }}
   template:
     metadata:
       {{- with .Values.nginx.podAnnotations }}
@@ -19,18 +18,21 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
-        app: {{ include "nginx.fullname" . }} #Cambiar
-        {{- include "nginx.selectorLabels" . | nindent 8 }} #Cambiar
+        app: {{ .Values.nginx.name }}
+        tier: frontend
+        track: stable
     spec:
       {{- with .Values.nginx.imagePullSecrets }}
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      serviceAccountName: {{ include "nginx.serviceAccountName" . }} #Cambiar
+      {{- if .Values.nginx.serviceAccount.create }}
+      serviceAccountName: {{ .Values.nginx.serviceAccount.name }} 
+      {{- end }}
       securityContext:
         {{- toYaml .Values.nginx.podSecurityContext | nindent 8 }}
       containers:
-        - name: {{ .Chart.Name }} #Cambiar
+        - name: {{ .Values.nginx.name }}
           securityContext:
             {{- toYaml .Values.nginx.securityContext | nindent 12 }}
           image: "{{ .Values.nginx.image.repository }}:{{ .Values.nginx.image.tag | default .Chart.AppVersion }}"
@@ -47,7 +49,7 @@ spec:
               containerPort: {{ .Values.nginx.ports.containerPort }}
           volumeMounts:
             - mountPath: /www
-              name: {{ .Values.nginx.volume.name }}
+              name: {{ .Values.volume.name }}
               readOnly: false
           #livenessProbe:
           #  httpGet:
@@ -60,9 +62,9 @@ spec:
           resources:
             {{- toYaml .Values.nginx.resources | nindent 12 }}
       volumes:
-        - name: {{ .Values.nginx.volume.name }}
+        - name: {{ .Values.volume.name }}
           persistentVolumeClaim:
-            claimName: {{ .Values.nginx.volume.claim.name }}
+            claimName: {{ .Values.volume.claim.name }}
       {{- with .Values.nginx.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}

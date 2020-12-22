@@ -1,28 +1,30 @@
-{{- if .Values.php-fpm.autoscaling.enabled }}
+{{- if .Values.phpFpm.autoscaling.enabled }}
 apiVersion: autoscaling/v2beta1
 kind: HorizontalPodAutoscaler
 metadata:
-  name: {{ include "php-fpm.fullname" . }} #Cambiar
+  name: {{ .Values.phpFpm.name }}
   labels:
-    {{- include "php-fpm.labels" . | nindent 4 }} #Cambiar
+    app: php-fpm
+    tier: backend
+    track: stable 
 spec:
   scaleTargetRef:
     apiVersion: apps/v1
     kind: Deployment
-    name: {{ include "php-fpm.fullname" . }} #Cambiar
-  minReplicas: {{ .Values.php-fpm.autoscaling.minReplicas }}
-  maxReplicas: {{ .Values.php-fpm.autoscaling.maxReplicas }}
+    name: {{ .Values.phpFpm.name }} 
+  minReplicas: {{ .Values.phpFpm.autoscaling.minReplicas }}
+  maxReplicas: {{ .Values.phpFpm.autoscaling.maxReplicas }}
   metrics:
-    {{- if .Values.php-fpm.autoscaling.targetCPUUtilizationPercentage }}
+    {{- if .Values.phpFpm.autoscaling.targetCPUUtilizationPercentage }}
     - type: Resource
       resource:
         name: cpu
-        targetAverageUtilization: {{ .Values.php-fpm.autoscaling.targetCPUUtilizationPercentage }}
+        targetAverageUtilization: {{ .Values.phpFpm.autoscaling.targetCPUUtilizationPercentage }}
     {{- end }}
-    {{- if .Values.php-fpm.autoscaling.targetMemoryUtilizationPercentage }}
+    {{- if .Values.phpFpm.autoscaling.targetMemoryUtilizationPercentage }}
     - type: Resource
       resource:
         name: memory
-        targetAverageUtilization: {{ .Values.php-fpm.autoscaling.targetMemoryUtilizationPercentage }}
+        targetAverageUtilization: {{ .Values.phpFpm.autoscaling.targetMemoryUtilizationPercentage }}
     {{- end }}
 {{- end }}

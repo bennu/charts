@@ -1,19 +1,19 @@
 apiVersion: batch/v1
 kind: job
 metadata:
-  name: {{ .Values.pre-install.download-files.name }}
+  name: {{ .Values.preInstall.downloadFiles.name }}
   annotations:
     "helm.sh/hook": pre-install
-    "helm.sh/hook-weight": "1"
+    "helm.sh/hook-weight": "-100"
     "helm.sh/hook-delete-policy": before-hook-creation ,hook-success
 spec:
   template:
     metadata:
-      name: {{ .Values.pre-install.download-files.name }}
+      name: {{ .Values.preInstall.downloadFiles.name }}
     spec:
       containers:
-        - image: "{{ .Values.pre-install.download-files.image.repository }}:{{ .Values.pre-install.download-files.image.tag }}"
-          name: {{ .Values.pre-install.download-files.name }}
+        - image: "{{ .Values.preInstall.downloadFiles.image.repository }}:{{ .Values.preInstall.downloadFiles.image.tag }}"
+          name: {{ .Values.preInstall.downloadFiles.name }}
           command: ["/bin/bash"]
           args:
             - -c
@@ -21,28 +21,28 @@ spec:
               cd /wwww &&
               mc alias set minio ${MINIO_URL} ${MINIO_USER} ${MINIO_PASS} &&
               mc cp ${FILES_ROUTE}
-          imagePullPolicy: {{ .Values.pre-install.download-files.pullPolicy }}
+          imagePullPolicy: {{ .Values.preInstall.downloadFiles.pullPolicy }}
           volumeMounts:
             - mountPath: /wwww
               name: {{ .Values.volume.name }}
               readOnly: false
           env:
             - name: MINIO_URL
-              value: {{ .Values.pre-install.download-files.environment.minio-url }}
+              value: {{ .Values.preInstall.downloadFiles.environment.minioUrl }}
             - name: MINIO_USER
               valueFrom:
                 secretKeyRef:
-                  name: {{ .Values.pre-install.download-files.environment.secret.name }}
+                  name: {{ .Values.preInstall.downloadFiles.environment.secret.name }}
                   key: username
             - name: MINIO_PASS
               valueFrom:
                 secretKeyRef:
-                  name: {{ .Values.pre-install.download-files.environment.secret.name }}
+                  name: {{ .Values.preInstall.downloadFiles.environment.secret.name }}
                   key: password
             - name: FILES_ROUTE
-              value: {{ .Values.pre-install.download-files.environment.files-route }}
+              value: {{ .Values.preInstall.downloadFiles.environment.filesRoute }}
       restartPolicy: never
       volumes:
-        - name: {{ .Value.volume.name }}
+        - name: {{ .Values.volume.name }}
           persistentVolumeClaim:
-            claimName: {{ .Value.volume.claim.name }}         
+            claimName: {{ .Values.volume.claim.name }}         
