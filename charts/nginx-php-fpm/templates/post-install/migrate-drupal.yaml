@@ -27,10 +27,10 @@ spec:
             sudo www-data ../vendor/drush/drush/drush cr 
         imagePullPolicy: {{ .Values.postInstall.migrateDrupal.image.pullPolicy }}
         volumeMounts:
-            - mountPath: /wwww
-              name: {{ .Values.volume.name }}
-              readOnly: false
-      restartPolicy: never
+        - mountPath: /wwww
+          name: {{ .Values.volume.name }}
+          readOnly: false
+      restartPolicy: Never
       volumes:
         - name: {{ .Values.volume.name }}
           persistentVolumeClaim:
