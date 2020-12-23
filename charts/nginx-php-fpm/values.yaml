@@ -203,7 +203,7 @@ nginx:
     # runAsUser: 1000
 
   service:
-    type: NodePort
+    type: ClusterIP
     port: 80
     targetPort: 80
 
