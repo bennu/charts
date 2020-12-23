@@ -15,16 +15,18 @@ spec:
       - image: "{{ .Values.postInstall.migrateDrupal.image.repository }}:{{ .Values.postInstall.migrateDrupal.image.tag }}"
         name: {{ .Values.postInstall.migrateDrupal.name }}
         command: ["/bin/bash"]
+        #INSTALAR GIT EN LA IMAGEN
         args:
           - -c
           - >- 
             tar -zxf docker8-demo-site.tar.gz &&
             tar -zxf files.tar.gz &&
             mv -v files/ web/sites/default/ &&
-            sudo wwww-data composer install &&
-            chown -R www-data:www-data /web && 
-            cd /web &&
-            sudo www-data ../vendor/drush/drush/drush cr 
+            composer self-update --1 &&
+            composer install &&
+            chown -R www-data:www-data web/ && 
+            cd web/ &&
+            sudo -u www-data ../vendor/drush/drush/drush cr 
         imagePullPolicy: {{ .Values.postInstall.migrateDrupal.image.pullPolicy }}
         volumeMounts:
         - mountPath: /www
