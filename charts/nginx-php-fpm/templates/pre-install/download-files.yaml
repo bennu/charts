@@ -1,5 +1,5 @@
 apiVersion: batch/v1
-kind: job
+kind: Job
 metadata:
   name: {{ .Values.preInstall.downloadFiles.name }}
   annotations:
@@ -20,7 +20,7 @@ spec:
             - >-
               cd /wwww &&
               mc alias set minio ${MINIO_URL} ${MINIO_USER} ${MINIO_PASS} &&
-              mc cp ${FILES_ROUTE} &&
+              mc cp ${FILES_ROUTE} . &&
               mc cp ${SITE_ROUTE} .
           imagePullPolicy: {{ .Values.preInstall.downloadFiles.pullPolicy }}
           volumeMounts:
