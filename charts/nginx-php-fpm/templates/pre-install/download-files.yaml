@@ -24,7 +24,7 @@ spec:
               mc cp ${SITE_ROUTE} .
           imagePullPolicy: {{ .Values.preInstall.downloadFiles.pullPolicy }}
           volumeMounts:
-            - mountPath: /wwww
+            - mountPath: /www
               name: {{ .Values.volume.name }}
               readOnly: false
           env:
