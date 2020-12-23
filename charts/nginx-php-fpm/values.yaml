@@ -17,6 +17,7 @@ preInstall:
     environment:
       minioUrl: https://minio.cepal.org/
       filesRoute: minio/drupal/files.tar.gz
+      siteRoute: minio/drupal/docker8-demo-site.tar.gz
       secret:
         name: minio-credentials
 
