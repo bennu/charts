@@ -17,11 +17,11 @@ spec:
         command: ["/bin/bash"]
         args:
           - -c
-          - >-
-            tar -zxf docker8-demo-site.tar.gz www/ &&
+          - >- 
+            cd www/ &&
+            tar -zxf docker8-demo-site.tar.gz . &&
             tar -zxf files.tar.gz www/web/sites/default &&
-            cd wwww/ && 
-            sudo wwww-data composer innstall &&
+            sudo wwww-data composer install &&
             chown -R www-data:www-data /web && 
             cd /web &&
             sudo www-data ../vendor/drush/drush/drush cr 
