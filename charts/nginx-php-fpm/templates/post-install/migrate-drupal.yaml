@@ -42,7 +42,7 @@ spec:
         - name: DB_URL
           value: {{ .Values.phpFpm.environment.database.url }}
         - name: DB_PORT
-          value: {{ .Values.phpFpm.environment.database.port }}
+          value: "{{ .Values.phpFpm.environment.database.port }}"
         - name: DB_NAME
           value: {{ .Values.phpFpm.environment.database.name }}
         volumeMounts:
