@@ -24,9 +24,9 @@ spec:
             mv -v files/ web/sites/default/ &&
             composer self-update --1 &&
             composer install &&
-            chown -R www-data:www-data web/ && 
-            cd web/ &&
-            sudo -u www-data ../vendor/drush/drush/drush cr 
+            apt-get -y install git &&
+            cd web/ && ../vendor/drush/drush/drush cr &&
+            cd .. && chown -R www-data:www-data web/ && 
         imagePullPolicy: {{ .Values.postInstall.migrateDrupal.image.pullPolicy }}
         env:
         - name: DB_USER
