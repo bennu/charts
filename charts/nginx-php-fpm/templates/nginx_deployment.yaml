@@ -32,35 +32,27 @@ spec:
       securityContext:
         {{- toYaml .Values.nginx.podSecurityContext | nindent 8 }}
       containers:
-        - name: {{ .Values.nginx.name }}
-          securityContext:
-            {{- toYaml .Values.nginx.securityContext | nindent 12 }}
-          image: "{{ .Values.nginx.image.repository }}:{{ .Values.nginx.image.tag | default .Chart.AppVersion }}"
-          imagePullPolicy: {{ .Values.nginx.image.pullPolicy }}
-          env:
-            - name: WEB_ROOT
-              value: /www
-            - name: PHP_SERVICE
-              value: {{ .Values.nginx.environment.php.name }}
-            - name: PHP_SERVICE_PORT
-              value: {{ .Values.nginx.environment.php.port }}
-          ports:
-            - name: {{ .Values.nginx.ports.name }}
-              containerPort: {{ .Values.nginx.ports.containerPort }}
-          volumeMounts:
-            - mountPath: /www
-              name: {{ .Values.volume.name }}
-              readOnly: false
-          #livenessProbe:
-          #  httpGet:
-          #    path: /
-          #    port: http
-          #readinessProbe:
-          #  httpGet:
-          #    path: /
-          #    port: http
-          resources:
-            {{- toYaml .Values.nginx.resources | nindent 12 }}
+      - name: {{ .Values.nginx.name }}
+        securityContext:
+          {{- toYaml .Values.nginx.securityContext | nindent 12 }}
+        image: "{{ .Values.nginx.image.repository }}:{{ .Values.nginx.image.tag | default .Chart.AppVersion }}"
+        imagePullPolicy: {{ .Values.nginx.image.pullPolicy }}
+        env:
+        - name: WEB_ROOT
+          value: /www
+        - name: PHP_SERVICE
+          value: {{ .Values.nginx.environment.php.name }}
+        - name: PHP_SERVICE_PORT
+          value: {{ .Values.nginx.environment.php.port }}
+        ports:
+        - containerPort: {{ .Values.nginx.ports.containerPort }}
+          name: {{ .Values.nginx.ports.name }}
+        volumeMounts:
+        - mountPath: /www
+          name: {{ .Values.volume.name }}
+          readOnly: false
+        resources:
+          {{- toYaml .Values.nginx.resources | nindent 12 }}
       volumes:
         - name: {{ .Values.volume.name }}
           persistentVolumeClaim:

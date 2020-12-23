@@ -61,7 +61,7 @@ phpFpm:
   
   environment:
     database:
-      name: d8t
+      name: "d8t"
       port: "3306"
       url: 172.20.1.40
       secret:
@@ -173,8 +173,8 @@ nginx:
 
   environment:
     php:
-      name: php-fpm
-      port: 9000
+      name: "php-fpm"
+      port: "9000"
 
   ports:
     containerPort: 80
