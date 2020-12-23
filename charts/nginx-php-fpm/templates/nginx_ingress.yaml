@@ -4,11 +4,9 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  #name: {{ $fullName }}
-  name: app-drupal
+  name: {{ $fullName }}
   labels:
-    #app: nginx
-    app: app-drupal
+    app: {{ $fullName }}
     tier: frontend
     track: stable
   {{- with .Values.nginx.ingress.annotations }}
