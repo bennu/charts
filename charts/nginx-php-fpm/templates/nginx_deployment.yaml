@@ -43,7 +43,7 @@ spec:
         - name: PHP_SERVICE
           value: {{ .Values.nginx.environment.php.name }}
         - name: PHP_SERVICE_PORT
-          value: {{ .Values.nginx.environment.php.port }}
+          value: "{{ .Values.nginx.environment.php.port }}"
         ports:
         - containerPort: {{ .Values.nginx.ports.containerPort }}
           name: {{ .Values.nginx.ports.name }}

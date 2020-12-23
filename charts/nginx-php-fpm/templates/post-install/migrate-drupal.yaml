@@ -22,9 +22,9 @@ spec:
             tar -zxf docker8-demo-site.tar.gz &&
             tar -zxf files.tar.gz &&
             mv -v files/ web/sites/default/ &&
+            apt-get -y install git &&
             composer self-update --1 &&
             composer install &&
-            apt-get -y install git &&
             cd web/ && ../vendor/drush/drush/drush cr &&
             cd .. && chown -R www-data:www-data web/ && 
         imagePullPolicy: {{ .Values.postInstall.migrateDrupal.image.pullPolicy }}
