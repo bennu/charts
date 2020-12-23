@@ -12,7 +12,7 @@ spec:
       name: {{ .Values.postInstall.migrateDrupal.name }}
     spec:
       containers:
-        image: "{{ .Values.postInstall.migrateDrupal.image.repository }}:{{ .Values.postInstall.migrateDrupal.image.tag }}"
+      - image: "{{ .Values.postInstall.migrateDrupal.image.repository }}:{{ .Values.postInstall.migrateDrupal.image.tag }}"
         name: {{ .Values.postInstall.migrateDrupal.name }}
         command: ["/bin/bash"]
         args:
