@@ -20,7 +20,7 @@ spec:
           - >- 
             ls &&
             tar -zxf docker8-demo-site.tar.gz &&
-            tar -zxf files.tar.gz www/web/sites/default &&
+            tar -zxf files.tar.gz web/sites/default &&
             sudo wwww-data composer install &&
             chown -R www-data:www-data /web && 
             cd /web &&
