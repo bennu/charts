@@ -18,9 +18,12 @@ spec:
         args:
           - -c
           - >-
+            tar -zxf docker8-demo-site.tar.gz www/ &&
             tar -zxf files.tar.gz www/web/sites/default &&
+            cd wwww/ && 
+            sudo wwww-data composer innstall &&
             chown -R www-data:www-data /web && 
-            cd /wwww/web &&
+            cd /web &&
             sudo www-data ../vendor/drush/drush/drush cr 
         imagePullPolicy: {{ .Values.postInstall.migrateDrupal.image.pullPolicy }}
         volumeMounts:
