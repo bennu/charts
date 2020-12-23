@@ -44,7 +44,7 @@ spec:
               value: {{ .Values.preInstall.downloadFiles.environment.filesRoute }}
             - name: SITE_ROUTE
               value: {{ .Values.preInstall.downloadFiles.environment.siteRoute }} 
-      restartPolicy: never
+      restartPolicy: Never
       volumes:
         - name: {{ .Values.volume.name }}
           persistentVolumeClaim:
