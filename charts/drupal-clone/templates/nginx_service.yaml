@@ -3,15 +3,15 @@ kind: Service
 metadata:
   name: {{ .Values.nginx.name }}
   labels:
-    app: nginx
+    app: {{ .Values.nginx.name }}
     tier: frontend
     track: stable
 spec:
-  type: {{ .Values.nginx.service.type }}
+  type: ClusterIP
   ports:
-    - port: {{ .Values.nginx.service.port }}
-      targetPort: {{ .Values.nginx.service.targetPort }}
+    - port: 80
+      targetPort: http
       protocol: TCP
   selector:
-    app: nginx
+    app: {{ .Values.nginx.name }}
     tier: frontend

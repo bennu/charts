@@ -3,14 +3,13 @@ kind: Service
 metadata:
   name: {{ .Values.phpFpm.name }}
   labels:
-    app: php-fpm 
+    app: {{ .Values.phpFpm.name }}
     tier: backend 
     track: stable 
 spec:
-  #type: {{ .Values.phpFpm.service.type }}
   ports:
-    - port: {{ .Values.phpFpm.service.port }}
-      targetPort: {{ .Values.phpFpm.service.targetPort }}
+    - port: 9000
+      targetPort: fastcgi
       protocol: TCP
   selector: 
     app: {{ .Values.phpFpm.name }}

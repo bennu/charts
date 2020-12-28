@@ -1,0 +1,57 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.phpFpm.name }}
+  annotations:
+    "helm.sh/hook-weight": "1"
+spec:
+  selector:
+    matchLabels:
+      app: {{ .Values.phpFpm.name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.phpFpm.name }}
+        tier: backend
+        track: stable
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      containers:
+      - name: {{ .Values.phpFpm.name }} 
+        image: "{{ .Values.phpFpm.image.repository }}:{{ .Values.phpFpm.image.tag | default .Chart.AppVersion }}"
+        imagePullPolicy: {{ .Values.phpFpm.image.pullPolicy }}
+        env:
+        - name: WEB_ROOT
+          value: /www
+        - name: DB_USER
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Values.phpFpm.environment.database.secretName }}
+              key: username
+        - name: DB_PASS
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Values.phpFpm.environment.database.secretName }}
+              key: password
+        - name: DB_URL
+          value: {{ .Values.phpFpm.environment.database.url }}
+        - name: DB_PORT
+          value: "{{ .Values.phpFpm.environment.database.port }}"
+        - name: DB_NAME
+          value: {{ .Values.phpFpm.environment.database.name }}
+        ports:
+        - name: fastcgi
+          containerPort: 9000
+        volumeMounts:
+        - mountPath: /www
+          name: drupal-storage
+          readOnly: false
+        resources:
+          {{- toYaml .Values.phpFpm.resources | nindent 12 }}
+      volumes:
+        - name: drupal-storage
+          persistentVolumeClaim:
+            claimName: {{ .Values.persistenceClaim.name }}

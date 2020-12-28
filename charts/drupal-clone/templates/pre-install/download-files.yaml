@@ -1,0 +1,55 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ .Values.preInstall.name }}
+  annotations:
+    "helm.sh/hook": pre-install
+    "helm.sh/hook-weight": "-100"
+    "helm.sh/hook-delete-policy": before-hook-creation ,hook-success
+spec:
+  template:
+    metadata:
+      name: {{ .Values.preInstall.name }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      containers:
+        - image: "{{ .Values.preInstall.image.repository }}:{{ .Values.preInstall.image.tag }}"
+          name: {{ .Values.preInstall.name }}
+          command: ["/bin/bash"]
+          args:
+            - -c
+            - >-
+              cd www/ &&
+              mc alias set minio ${MINIO_URL} ${MINIO_USER} ${MINIO_PASS} &&
+              mc cp minio/${FILES_ROUTE} . &&
+              mc cp minio/${SITE_ROUTE} .
+          imagePullPolicy: {{ .Values.preInstall.pullPolicy }}
+          volumeMounts:
+            - mountPath: /www
+              name: drupal-storage
+              readOnly: false
+          env:
+            - name: MINIO_URL
+              value: {{ .Values.environment.minioUrl }}
+            - name: MINIO_USER
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.environment.minioSecretName}}
+                  key: username
+            - name: MINIO_PASS
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.environment.minioSecretName }}
+                  key: password
+            - name: FILES_ROUTE
+              value: {{ .Values.environment.filesRoute }}
+            - name: SITE_ROUTE
+              value: {{ .Values.environment.siteRoute }} 
+      restartPolicy: Never
+      volumes:
+        - name: drupal-storage
+          persistentVolumeClaim:
+            claimName: {{ .Values.persistenceClaim.name }}         

@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.nginx.name }}
+  annotations:
+    "helm.sh/hook-weight": "2"
+spec:
+  selector:
+    matchLabels:
+      app: {{ .Values.nginx.name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.nginx.name }}
+        tier: frontend
+        track: stable
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      containers:
+      - name: {{ .Values.nginx.name }}
+        securityContext:
+          {{- toYaml .Values.nginx.securityContext | nindent 12 }}
+        image: "{{ .Values.nginx.image.repository }}:{{ .Values.nginx.image.tag | default .Chart.AppVersion }}"
+        imagePullPolicy: {{ .Values.nginx.image.pullPolicy }}
+        env:
+        - name: WEB_ROOT
+          value: /www
+        - name: PHP_SERVICE
+          value: {{ .Values.phpFpm.name }}
+        - name: PHP_SERVICE_PORT
+          value: "9000"
+        ports:
+        - containerPort: http
+          name: 80
+        volumeMounts:
+        - mountPath: /www
+          name: drupal-storage
+          readOnly: false
+        resources:
+          {{- toYaml .Values.nginx.resources | nindent 12 }}
+      volumes:
+        - name: drupal-storage
+          persistentVolumeClaim:
+            claimName: {{ .Values.persistenceClaim.name }}

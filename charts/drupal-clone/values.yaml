@@ -1,0 +1,100 @@
+#Database values needed for Drupal to work
+#The database should previously exist and be populated
+externalDatabase:
+  #Database name
+  name:
+  #Database port
+  port: 3306
+  #Database url
+  url: 
+  #The secret should exist beforehand
+  #The secret should be a basic-auth type
+  #or contain username and password fields
+  secretName: mysql-credentials
+
+environment:
+  #Url for minio
+  minioUrl: https://my.minio.test
+  #Router for user files dump inside minio
+  #Ex: bucket-example/exameple-userfiles.tar.gz
+  filesRoute: 
+  #Router for drupal site dump inside minio
+  #Ex: bucket-example/example-demo-site.tar.gz
+  siteRoute: 
+  #The secret should exist beforehand
+  #The secret should be a basic-auth type
+  #or contain username and password fields
+  minioSecretName: minio-credentials
+
+
+#This PVC should exist beforehand
+#Tt should be a PVC over a NFS PV
+#or any kind of volume that support
+#Multiples write/read operations
+persistenceClaim:
+  name: drupal-volume-claim
+
+#Values example:
+# name: image-pull
+imagePullSecrets: []
+
+#Jobs parameters
+Jobs:
+  #This job execute before php-fpm and nginx deployment
+  preInstall:
+    name: files-drupal
+    image:
+      repository: minio/mc
+      tag: RELEASE.2020-12-18T10-53-53Z
+      pullPolicy: IfNotPresent
+  #This job execute after php-fpm and nginx deployment
+  postInstall:
+    name: migration-drupal
+    image:
+      repository: bennu/php-cli
+      tag: testv3
+      pullPolicy: IfNotPresent
+
+#Variables related to php-fpm
+phpFpm:
+
+  name: "php-fpm"
+
+  replicaCount: 1
+
+  image:
+    repository: bennu/php-fpm
+    pullPolicy: IfNotPresent
+    tag: "testdrupal"
+
+
+#Variables related to nginx
+nginx:
+
+  name: "nginx"
+
+  replicaCount: 1
+
+  image:
+    repository: bennu/nginx
+    pullPolicy: IfNotPresent
+    tag: "testv2"
+
+  ingress:
+    enabled: true
+    annotations: {
+      kubernetes.io/ingress.class: nginx,
+      nginx.ingress.kubernetes.io/force-ssl-redirect: "true",
+      nginx.ingress.kubernetes.io/proxy-buffer-size: 16k,
+      nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    }
+    hosts:
+      #Ingress url to access drupal site
+      - host: my.url.test
+        paths: [
+          path: /
+        ]
+
+
+
+
