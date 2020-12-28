@@ -17,7 +17,7 @@ spec:
       {{- end }}
       containers:
       - image: "{{ .Values.jobs.postInstall.image.repository }}:{{ .Values.jobs.postInstall.image.tag }}"
-        name: {{ .Values.postInstall.name }}
+        name: {{ .Values.jobs.postInstall.name }}
         command: ["/bin/bash"]
         args:
           - -c
