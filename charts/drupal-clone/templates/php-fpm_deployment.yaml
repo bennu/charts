@@ -29,19 +29,19 @@ spec:
         - name: DB_USER
           valueFrom:
             secretKeyRef:
-              name: {{ .Values.phpFpm.environment.database.secretName }}
+              name: {{ .Values.externalDatabase.secretName }}
               key: username
         - name: DB_PASS
           valueFrom:
             secretKeyRef:
-              name: {{ .Values.phpFpm.environment.database.secretName }}
+              name: {{ .Values.externalDatabase.secretName }}
               key: password
         - name: DB_URL
-          value: {{ .Values.phpFpm.environment.database.url }}
+          value: {{ .Values.externalDatabase.url }}
         - name: DB_PORT
-          value: "{{ .Values.phpFpm.environment.database.port }}"
+          value: "{{ .Values.externalDatabase.port }}"
         - name: DB_NAME
-          value: {{ .Values.phpFpm.environment.database.name }}
+          value: {{ .Values.externalDatabase.name }}
         ports:
         - name: fastcgi
           containerPort: 9000
@@ -49,8 +49,6 @@ spec:
         - mountPath: /www
           name: drupal-storage
           readOnly: false
-        resources:
-          {{- toYaml .Values.phpFpm.resources | nindent 12 }}
       volumes:
         - name: drupal-storage
           persistentVolumeClaim:
