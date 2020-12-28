@@ -33,8 +33,9 @@ spec:
         - name: PHP_SERVICE_PORT
           value: "9000"
         ports:
-        - containerPort: http
-          name: 80
+        - name: http
+          containerPort: 80
+          
         volumeMounts:
         - mountPath: /www
           name: drupal-storage
