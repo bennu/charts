@@ -2,10 +2,10 @@ apiVersion: v1
 kind: Pod
 metadata:
   name: "php-fpm-test-connection"
-  {{- with .Values.phpFpm.labels }}
   labels:
-    {{- toYaml . | nindent 4 }}  
-  {{- end}}
+    app: {{ .Values.phpFpm.name }}
+    tier: backend
+    track: stable
   annotations:
     "helm.sh/hook": test-success
 spec:
@@ -13,5 +13,5 @@ spec:
     - name: wget
       image: busybox
       command: ['wget']
-      args: ['{{ .Values.phpFpm.name }}:{{ .Values.phpFpm.service.port }}']
+      args: ['{{ .Values.phpFpm.name }}:9000']
   restartPolicy: Never
