@@ -15,7 +15,6 @@ spec:
       - image: "{{ .Values.postInstall.migrateDrupal.image.repository }}:{{ .Values.postInstall.migrateDrupal.image.tag }}"
         name: {{ .Values.postInstall.migrateDrupal.name }}
         command: ["/bin/bash"]
-        #INSTALAR GIT EN LA IMAGEN
         args:
           - -c
           - >- 
