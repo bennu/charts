@@ -26,7 +26,7 @@ spec:
               mc alias set minio ${MINIO_URL} ${MINIO_USER} ${MINIO_PASS} &&
               mc cp minio/${FILES_ROUTE} . &&
               mc cp minio/${SITE_ROUTE} .
-          imagePullPolicy: {{ .Values.preInstall.pullPolicy }}
+          imagePullPolicy: {{ .Values.jobs.preInstall.pullPolicy }}
           volumeMounts:
             - mountPath: /www
               name: drupal-storage
