@@ -55,4 +55,4 @@ spec:
       volumes:
         - name: drupal-storage
           persistentVolumeClaim:
-            claimName: {{ .Values.persistence.claim.name }}     
+            claimName: {{ .Values.persistenceClaim.name }}     
