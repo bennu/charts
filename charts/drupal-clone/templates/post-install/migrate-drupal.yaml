@@ -1,7 +1,7 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: {{ .Values.postInstall.name }}
+  name: {{ .Values.jobs.postInstall.name }}
   annotations:
     "helm.sh/hook": post-install
     "helm.sh/hook-weight": "100"
