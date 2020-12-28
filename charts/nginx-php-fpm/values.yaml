@@ -15,9 +15,9 @@ preInstall:
       tag: RELEASE.2020-12-18T10-53-53Z
       pullPolicy: IfNotPresent
     environment:
-      minioUrl: https://minio.cepal.org/
-      filesRoute: minio/drupal/files.tar.gz
-      siteRoute: minio/drupal/docker8-demo-site.tar.gz
+      minioUrl: https://my.minio.test
+      filesRoute: myminio/drupal/userfiles.tar.gz
+      siteRoute: myminio/drupal/demo-site.tar.gz
       secret:
         name: minio-credentials
 
@@ -61,9 +61,9 @@ phpFpm:
   
   environment:
     database:
-      name: "agenda2030testactual"
+      name: "myname"
       port: 3306
-      url: 172.20.1.40
+      url: 0.0.0.0
       secret:
         name: mysql-credentials
 
@@ -218,7 +218,7 @@ nginx:
       # kubernetes.io/ingress.class: nginx
       # kubernetes.io/tls-acme: "true"
     hosts:
-      - host: agenda2030.sgo-k8s-dev.k8stic.net
+      - host: my.url.test
         paths: [
           path: /
         ]
