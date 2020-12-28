@@ -9,7 +9,7 @@ metadata:
 spec:
   ports:
     - port: 9000
-      targetPort: fastcgi
+      targetPort: 9000
       protocol: TCP
   selector: 
     app: {{ .Values.phpFpm.name }}
