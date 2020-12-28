@@ -39,7 +39,7 @@ persistenceClaim:
 imagePullSecrets: []
 
 #Jobs parameters
-Jobs:
+jobs:
   #This job execute before php-fpm and nginx deployment
   preInstall:
     name: files-drupal

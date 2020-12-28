@@ -9,14 +9,14 @@ metadata:
 spec:
   template:
     metadata:
-      name: {{ .Values.postInstall.name }}
+      name: {{ .Values.jobs.postInstall.name }}
     spec:
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       containers:
-      - image: "{{ .Values.postInstall.image.repository }}:{{ .Values.postInstall.image.tag }}"
+      - image: "{{ .Values.jobs.postInstall.image.repository }}:{{ .Values.jobs.postInstall.image.tag }}"
         name: {{ .Values.postInstall.name }}
         command: ["/bin/bash"]
         args:
@@ -29,7 +29,7 @@ spec:
             composer install &&
             cd web/ && ls && ../vendor/drush/drush/drush cr &&
             cd .. && chown -R www-data:www-data web/ 
-        imagePullPolicy: {{ .Values.postInstall.image.pullPolicy }}
+        imagePullPolicy: {{ .Values.jobs.postInstall.image.pullPolicy }}
         env:
         - name: DB_USER
           valueFrom:
