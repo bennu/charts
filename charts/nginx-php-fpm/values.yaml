@@ -26,7 +26,7 @@ postInstall:
     name: migration-drupal
     image:
       repository: bennu/php-cli
-      tag: testv2
+      tag: testv3
       pullPolicy: IfNotPresent
 
 phpFpm:
