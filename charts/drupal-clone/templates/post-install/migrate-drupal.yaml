@@ -22,13 +22,17 @@ spec:
         args:
           - -c
           - >- 
-            tar -zxf docker8-demo-site.tar.gz &&
-            tar -zxf files.tar.gz &&
+            tar -zxf {{ .Values.environment.siteName }} &&
+            tar -zxf {{ .Values.environment.filesName }} &&
+            rm {{ .Values.environment.siteName }} && 
+            rm {{ .Values.environment.filesName }} &&
             mv -v files/ web/sites/default/ &&
             composer self-update --1 &&
             composer install &&
-            cd web/ && ls && ../vendor/drush/drush/drush cr &&
-            cd .. && chown -R www-data:www-data web/ 
+            cd web/ &&
+            ../vendor/drush/drush/drush cr &&
+            cd .. && 
+            chown -R www-data:www-data web/ 
         imagePullPolicy: {{ .Values.jobs.postInstall.image.pullPolicy }}
         env:
         - name: DB_USER

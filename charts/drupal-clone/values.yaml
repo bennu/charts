@@ -21,6 +21,12 @@ environment:
   #Router for drupal site dump inside minio
   #Ex: bucket-example/example-demo-site.tar.gz
   siteRoute: 
+  #Should match filesRoute tar.gz filename
+  #Ex: exameple-userfiles.tar.gz
+  filesName:
+  #Should match site tar.gz filename
+  #Ex: example-demo-site.tar.gz
+  siteName:
   #The secret should exist beforehand
   #The secret should be a basic-auth type
   #or contain username and password fields
