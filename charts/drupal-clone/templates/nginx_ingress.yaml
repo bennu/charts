@@ -1,0 +1,28 @@
+{{- if .Values.nginx.ingress.enabled -}}
+{{- $hosturl := .Values.nginx.host -}}
+{{- $nginxName := include "drupal-clone.fullname" . -}}
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ $nginxName }}-nginx-ingress
+  labels:
+    app: {{ $nginxName }}-nginx
+    tier: frontend
+    track: stable
+  {{- with .Values.nginx.ingress.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  rules:
+    - host: {{ $hosturl }}
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ $nginxName }}-nginx-svc
+                port:
+                  number: 80
+  {{- end }}

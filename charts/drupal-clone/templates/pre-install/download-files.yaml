@@ -1,0 +1,59 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ .Values.jobs.preInstall.name }}-preinstall
+  annotations:
+    "helm.sh/hook": pre-install
+    "helm.sh/hook-weight": "-100"
+    "helm.sh/hook-delete-policy": before-hook-creation ,hook-success
+spec:
+  template:
+    metadata:
+      name: {{ .Values.jobs.preInstall.name }}-preinstall
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      containers:
+        - image: "{{ .Values.jobs.preInstall.image.repository }}:{{ .Values.jobs.preInstall.image.tag }}"
+          name: {{ .Values.jobs.preInstall.name }}-preinstall
+          command: ["/bin/bash"]
+          args:
+            - -c
+            - >-
+              cd www/ &&
+              mc alias set minio ${MINIO_URL} ${MINIO_USER} ${MINIO_PASS} &&
+              mc cp minio/${ASSETS_ROUTE}/${ASSETS_FILENAME} . &&
+              mc cp minio/${CUSTOMSITE_ROUTE}/${CUSTOMSITE_FILENAME} .
+          imagePullPolicy: {{ .Values.jobs.preInstall.pullPolicy }}
+          volumeMounts:
+            - mountPath: /www
+              name: drupal-storage
+              readOnly: false
+          env:
+            - name: MINIO_URL
+              value: {{ .Values.environment.minioUrl }}
+            - name: MINIO_USER
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.environment.minioSecretName}}
+                  key: username
+            - name: MINIO_PASS
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.environment.minioSecretName }}
+                  key: password
+            - name: ASSETS_ROUTE
+              value: {{ .Values.environment.assetsRoute }}
+            - name: CUSTOMSITE_ROUTE
+              value: {{ .Values.environment.customSiteRoute }} 
+            - name: ASSETS_FILENAME
+              value: {{ .Values.environment.assetsFileName }}
+            - name: CUSTOMSITE_FILENAME
+              value: {{ .Values.environment.customSiteFileName }} 
+      restartPolicy: Never
+      volumes:
+        - name: drupal-storage
+          persistentVolumeClaim:
+            claimName: {{ .Values.persistenceClaim.name }}         

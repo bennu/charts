@@ -1,0 +1,56 @@
+{{- $phpName := include "drupal-clone.fullname" . -}}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ $phpName }}-phpfpm-deployment
+  annotations:
+    "helm.sh/hook-weight": "1"
+spec:
+  selector:
+    matchLabels:
+      app: {{ $phpName }}-phpfpm
+  template:
+    metadata:
+      labels:
+        app: {{ $phpName }}-phpfpm
+        tier: backend
+        track: stable
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      containers:
+      - name: {{ $phpName }}-phpfpm
+        image: "{{ .Values.phpFpm.image.repository }}:{{ .Values.phpFpm.image.tag | default .Chart.AppVersion }}"
+        imagePullPolicy: {{ .Values.phpFpm.image.pullPolicy }}
+        env:
+        - name: WEB_ROOT
+          value: /www
+        - name: DB_USER
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Values.externalDatabase.secretName }}
+              key: username
+        - name: DB_PASS
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Values.externalDatabase.secretName }}
+              key: password
+        - name: DB_URL
+          value: {{ .Values.externalDatabase.url }}
+        - name: DB_PORT
+          value: "{{ .Values.externalDatabase.port }}"
+        - name: DB_NAME
+          value: {{ .Values.externalDatabase.name }}
+        ports:
+        - name: fastcgi
+          containerPort: 9000
+        volumeMounts:
+        - mountPath: /www
+          name: drupal-storage
+          readOnly: false
+      volumes:
+        - name: drupal-storage
+          persistentVolumeClaim:
+            claimName: {{ .Values.persistenceClaim.name }}

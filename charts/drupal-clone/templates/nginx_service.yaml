@@ -1,0 +1,18 @@
+{{- $nginxName := include "drupal-clone.fullname" . -}}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ $nginxName }}-nginx-svc
+  labels:
+    app: {{ $nginxName }}-nginx
+    tier: frontend
+    track: stable
+spec:
+  type: ClusterIP
+  ports:
+    - port: 80
+      targetPort: http
+      protocol: TCP
+  selector:
+    app: {{ $nginxName }}-nginx
+    tier: frontend

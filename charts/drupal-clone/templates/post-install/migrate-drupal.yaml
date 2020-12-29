@@ -1,0 +1,66 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ .Values.jobs.postInstall.name }}-postinstall
+  annotations:
+    "helm.sh/hook": post-install
+    "helm.sh/hook-weight": "100"
+    "helm.sh/hook-delete-policy": before-hook-creation ,hook-success
+spec:
+  template:
+    metadata:
+      name: {{ .Values.jobs.postInstall.name }}-postinstall
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      containers:
+      - image: "{{ .Values.jobs.postInstall.image.repository }}:{{ .Values.jobs.postInstall.image.tag }}"
+        name: {{ .Values.jobs.postInstall.name }}-postinstall
+        command: ["/bin/bash"]
+        args:
+          - -c
+          - >- 
+            tar -zxf ${ASSETS_FILENAME} &&
+            tar -zxf ${CUSTOMSITE_FILENAME} &&
+            rm ${ASSETS_FILENAME} && 
+            rm ${CUSTOMSITE_FILENAME} &&
+            mv -v files/ web/sites/default/ &&
+            composer self-update --1 &&
+            composer install &&
+            cd web/ &&
+            ../vendor/drush/drush/drush cr &&
+            cd .. && 
+            chown -R www-data:www-data web/ 
+        imagePullPolicy: {{ .Values.jobs.postInstall.image.pullPolicy }}
+        env:
+        - name: DB_USER
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Values.externalDatabase.secretName }}
+              key: username
+        - name: DB_PASS
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Values.externalDatabase.secretName }}
+              key: password
+        - name: DB_URL
+          value: {{ .Values.externalDatabase.url }}
+        - name: DB_PORT
+          value: "{{ .Values.externalDatabase.port }}"
+        - name: DB_NAME
+          value: {{ .Values.externalDatabase.name }}
+        - name: ASSETS_FILENAME
+          value: {{ .Values.environment.assetsFileName }}
+        - name: CUSTOMSITE_FILENAME
+          value: {{ .Values.environment.customSiteFileName }} 
+        volumeMounts:
+        - mountPath: /www
+          name: drupal-storage
+          readOnly: false
+      restartPolicy: Never
+      volumes:
+        - name: drupal-storage
+          persistentVolumeClaim:
+            claimName: {{ .Values.persistenceClaim.name }}     

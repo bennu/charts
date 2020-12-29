@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "nginx-test-connection"
+  labels:
+    app: {{ .Values.nginx.name }}-nginx
+    tier: frontend
+    track: stable
+  annotations:
+    "helm.sh/hook": test
+spec:
+  containers:
+    - name: wget
+      image: busybox
+      command: ['wget']
+      args: ['{{ .Values.nginx.name }}:80']
+  restartPolicy: Never
