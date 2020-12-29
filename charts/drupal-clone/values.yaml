@@ -96,8 +96,8 @@ nginx:
       nginx.ingress.kubernetes.io/ssl-redirect: "true"
     }
 
-     #Ingress url to access drupal site
-    host: my.url.test
+  #Ingress url to access drupal site
+  host: my.url.test
 
 
 
