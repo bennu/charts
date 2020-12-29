@@ -3,40 +3,50 @@ entries:
   drupal-clone:
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2020-12-29T11:04:08.422390165-03:00"
+    created: "2020-12-29T16:44:25.597676723-03:00"
+    description: Drupal clone
+    digest: df09f536e2f0f2b41e76e9166869439f37dc7653d8681310597147dd6f740dd5
+    name: drupal-clone
+    type: application
+    urls:
+    - charts.bennu.cl/drupal-clone-1.0.0.tgz
+    version: 1.0.0
+  - apiVersion: v2
+    appVersion: 1.16.0
+    created: "2020-12-29T16:44:25.59616819-03:00"
     description: Drupal clone
     digest: dd165df3126ccab119570dfcb2c03b58eb44bb9531f1c2fd19821267afb5c3df
     name: drupal-clone
     type: application
     urls:
-    - drupal-clone-0.1.0.tgz
+    - charts.bennu.cl/drupal-clone-0.1.0.tgz
     version: 0.1.0
   konga:
   - apiVersion: v1
     appVersion: 0.14.9
-    created: "2020-12-29T11:04:08.424093947-03:00"
+    created: "2020-12-29T16:44:25.599039363-03:00"
     description: Kong helm chart
     digest: ec839c9cda20db97b693a927066a6bb1814398e3dbdd440ff1a8be5b1d4e9854
     name: konga
     urls:
-    - kong-1.0.2.tgz
+    - charts.bennu.cl/kong-1.0.2.tgz
     version: 1.0.2
   - apiVersion: v1
     appVersion: 0.14.9
-    created: "2020-12-29T11:04:08.42779696-03:00"
+    created: "2020-12-29T16:44:25.603441542-03:00"
     description: Kong helm chart
     digest: 38501a83971e03f47a4c2d049e8814d7abda8f5b6c3285f5f7a7e9ad979f4816
     name: konga
     urls:
-    - konga-1.0.1.tgz
+    - charts.bennu.cl/konga-1.0.1.tgz
     version: 1.0.1
   - apiVersion: v1
     appVersion: "1.0"
-    created: "2020-12-29T11:04:08.425858067-03:00"
+    created: "2020-12-29T16:44:25.601791458-03:00"
     description: A Helm chart for Kubernetes
     digest: 7a86b10611be170bb9bda34cac62a78b9aa501de9d44dd8e965144297757b1f1
     name: konga
     urls:
-    - konga-1.0.0.tgz
+    - charts.bennu.cl/konga-1.0.0.tgz
     version: 1.0.0
-generated: "2020-12-29T11:04:08.419790292-03:00"
+generated: "2020-12-29T16:44:25.594373531-03:00"

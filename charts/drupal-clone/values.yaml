@@ -16,8 +16,8 @@ externalDatabase:
   secretName: mysql-credentials
 
 environment:
-  #Url for minio
-  minioUrl: https://my.minio.test
+  #Url for s3 or any compatible bucket
+  s3Bucket: https://my.minio.test
   #Router for user files dump inside minio
   #Ex: bucket-example/folder/to/assets
   assetsRoute:
@@ -35,7 +35,7 @@ environment:
   #The secret should exist beforehand
   #The secret should be a basic-auth type
   #or contain username and password fields
-  minioSecretName: minio-credentials
+  s3BucketSecretName: minio-credentials
 
 
 #This PVC should exist beforehand
