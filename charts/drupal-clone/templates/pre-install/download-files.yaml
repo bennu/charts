@@ -23,26 +23,26 @@ spec:
             - -c
             - >-
               cd www/ &&
-              mc alias set minio ${MINIO_URL} ${MINIO_USER} ${MINIO_PASS} &&
-              mc cp minio/${ASSETS_ROUTE}/${ASSETS_FILENAME} . &&
-              mc cp minio/${CUSTOMSITE_ROUTE}/${CUSTOMSITE_FILENAME} .
+              mc alias set s3_bucket ${S3_URL} ${S3_USER} ${S3_PASS} &&
+              mc cp s3_bucket/${ASSETS_ROUTE}/${ASSETS_FILENAME} . &&
+              mc cp s3_bucket/${CUSTOMSITE_ROUTE}/${CUSTOMSITE_FILENAME} .
           imagePullPolicy: {{ .Values.jobs.preInstall.pullPolicy }}
           volumeMounts:
             - mountPath: /www
               name: drupal-storage
               readOnly: false
           env:
-            - name: MINIO_URL
-              value: {{ .Values.environment.minioUrl }}
-            - name: MINIO_USER
+            - name: S3_URL
+              value: {{ .Values.environment.s3Bucket }}
+            - name: S3_USER
               valueFrom:
                 secretKeyRef:
-                  name: {{ .Values.environment.minioSecretName}}
+                  name: {{ .Values.environment.s3BucketSecretName}}
                   key: username
-            - name: MINIO_PASS
+            - name: S3_PASS
               valueFrom:
                 secretKeyRef:
-                  name: {{ .Values.environment.minioSecretName }}
+                  name: {{ .Values.environment.s3BucketSecretName }}
                   key: password
             - name: ASSETS_ROUTE
               value: {{ .Values.environment.assetsRoute }}
