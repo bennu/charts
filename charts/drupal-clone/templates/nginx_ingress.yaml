@@ -22,7 +22,7 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: {{ $nginxName }}-svc
+                name: {{ $nginxName }}-nginx-svc
                 port:
                   number: 80
   {{- end }}

@@ -22,10 +22,10 @@ spec:
         args:
           - -c
           - >- 
-            tar -zxf {{ .Values.environment.assetsName }} &&
-            tar -zxf {{ .Values.environment.customSiteName }} &&
-            rm {{ .Values.environment.assetsName }} && 
-            rm {{ .Values.environment.customSiteName }} &&
+            tar -zxf ${ASSETS_FILENAME} &&
+            tar -zxf ${CUSTOMSITE_FILENAME} &&
+            rm ${ASSETS_FILENAME} && 
+            rm ${CUSTOMSITE_FILENAME} &&
             mv -v files/ web/sites/default/ &&
             composer self-update --1 &&
             composer install &&
@@ -51,6 +51,10 @@ spec:
           value: "{{ .Values.externalDatabase.port }}"
         - name: DB_NAME
           value: {{ .Values.externalDatabase.name }}
+        - name: ASSETS_FILENAME
+          value: {{ .Values.environment.assetsFileName }}
+        - name: CUSTOMSITE_FILENAME
+          value: {{ .Values.environment.customSiteFileName }} 
         volumeMounts:
         - mountPath: /www
           name: drupal-storage
