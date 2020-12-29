@@ -1,3 +1,6 @@
+
+nameOverride: 
+
 #Database values needed for Drupal to work
 #The database should previously exist and be populated
 externalDatabase:
@@ -16,17 +19,19 @@ environment:
   #Url for minio
   minioUrl: https://my.minio.test
   #Router for user files dump inside minio
-  #Ex: bucket-example/exameple-userfiles.tar.gz
-  filesRoute: 
+  #Ex: bucket-example/folder/to/assets
+  assetsRoute:
   #Router for drupal site dump inside minio
-  #Ex: bucket-example/example-demo-site.tar.gz
-  siteRoute: 
+  #Ex: bucket-example/folder/to/customsite
+  customSiteRoute:
   #Should match filesRoute tar.gz filename
   #Ex: exameple-userfiles.tar.gz
-  filesName:
+  #NOTE: inside this tar.gz file should be
+  #the folder files with all the user's assets
+  assetsFileName: 
   #Should match site tar.gz filename
   #Ex: example-demo-site.tar.gz
-  siteName:
+  customSiteFileName: 
   #The secret should exist beforehand
   #The secret should be a basic-auth type
   #or contain username and password fields
@@ -64,8 +69,6 @@ jobs:
 #Variables related to php-fpm
 phpFpm:
 
-  name: "php-fpm"
-
   replicaCount: 1
 
   image:
@@ -76,8 +79,6 @@ phpFpm:
 
 #Variables related to nginx
 nginx:
-
-  name: "nginx"
 
   replicaCount: 1
 
@@ -94,12 +95,10 @@ nginx:
       nginx.ingress.kubernetes.io/proxy-buffer-size: 16k,
       nginx.ingress.kubernetes.io/ssl-redirect: "true"
     }
-    hosts:
-      #Ingress url to access drupal site
-      - host: my.url.test
-        paths: [
-          path: /
-        ]
+
+     #Ingress url to access drupal site
+    host: my.url.test
+
 
 
 

@@ -1,7 +1,7 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: {{ .Values.jobs.postInstall.name }}
+  name: {{ .Values.jobs.postInstall.name }}-postinstall
   annotations:
     "helm.sh/hook": post-install
     "helm.sh/hook-weight": "100"
@@ -9,7 +9,7 @@ metadata:
 spec:
   template:
     metadata:
-      name: {{ .Values.jobs.postInstall.name }}
+      name: {{ .Values.jobs.postInstall.name }}-postinstall
     spec:
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
@@ -17,15 +17,15 @@ spec:
       {{- end }}
       containers:
       - image: "{{ .Values.jobs.postInstall.image.repository }}:{{ .Values.jobs.postInstall.image.tag }}"
-        name: {{ .Values.jobs.postInstall.name }}
+        name: {{ .Values.jobs.postInstall.name }}-postinstall
         command: ["/bin/bash"]
         args:
           - -c
           - >- 
-            tar -zxf {{ .Values.environment.siteName }} &&
-            tar -zxf {{ .Values.environment.filesName }} &&
-            rm {{ .Values.environment.siteName }} && 
-            rm {{ .Values.environment.filesName }} &&
+            tar -zxf {{ .Values.environment.assetsName }} &&
+            tar -zxf {{ .Values.environment.customSiteName }} &&
+            rm {{ .Values.environment.assetsName }} && 
+            rm {{ .Values.environment.customSiteName }} &&
             mv -v files/ web/sites/default/ &&
             composer self-update --1 &&
             composer install &&

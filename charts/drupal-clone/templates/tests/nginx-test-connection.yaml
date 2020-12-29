@@ -3,7 +3,7 @@ kind: Pod
 metadata:
   name: "nginx-test-connection"
   labels:
-    app: {{ .Values.nginx.name }}
+    app: {{ .Values.nginx.name }}-nginx
     tier: frontend
     track: stable
   annotations:

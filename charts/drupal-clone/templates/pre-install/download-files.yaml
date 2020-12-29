@@ -1,7 +1,7 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: {{ .Values.jobs.preInstall.name }}
+  name: {{ .Values.jobs.preInstall.name }}-preinstall
   annotations:
     "helm.sh/hook": pre-install
     "helm.sh/hook-weight": "-100"
@@ -9,7 +9,7 @@ metadata:
 spec:
   template:
     metadata:
-      name: {{ .Values.jobs.preInstall.name }}
+      name: {{ .Values.jobs.preInstall.name }}-preinstall
     spec:
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
@@ -17,15 +17,15 @@ spec:
       {{- end }}
       containers:
         - image: "{{ .Values.jobs.preInstall.image.repository }}:{{ .Values.jobs.preInstall.image.tag }}"
-          name: {{ .Values.jobs.preInstall.name }}
+          name: {{ .Values.jobs.preInstall.name }}-preinstall
           command: ["/bin/bash"]
           args:
             - -c
             - >-
               cd www/ &&
               mc alias set minio ${MINIO_URL} ${MINIO_USER} ${MINIO_PASS} &&
-              mc cp minio/${FILES_ROUTE} . &&
-              mc cp minio/${SITE_ROUTE} .
+              mc cp minio/${ASSETS_ROUTE}/${ASSETS_FILENAME} . &&
+              mc cp minio/${CUSTOMSITE_ROUTE}/${CUSTOMSITE_FILENAME} .
           imagePullPolicy: {{ .Values.jobs.preInstall.pullPolicy }}
           volumeMounts:
             - mountPath: /www
@@ -44,10 +44,14 @@ spec:
                 secretKeyRef:
                   name: {{ .Values.environment.minioSecretName }}
                   key: password
-            - name: FILES_ROUTE
-              value: {{ .Values.environment.filesRoute }}
-            - name: SITE_ROUTE
-              value: {{ .Values.environment.siteRoute }} 
+            - name: ASSETS_ROUTE
+              value: {{ .Values.environment.assetsRoute }}
+            - name: CUSTOMSITE_ROUTE
+              value: {{ .Values.environment.customSiteRoute }} 
+            - name: ASSETS_FILENAME
+              value: {{ .Values.environment.assetsFileName }}
+            - name: CUSTOMSITE_FILENAME
+              value: {{ .Values.environment.customSiteFileName }} 
       restartPolicy: Never
       volumes:
         - name: drupal-storage

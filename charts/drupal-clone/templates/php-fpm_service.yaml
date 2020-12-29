@@ -1,9 +1,10 @@
+{{- $phpName := include "drupal-clone.fullname" . -}}
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ .Values.phpFpm.name }}
+  name: {{ $phpName }}-phpfpm-svc
   labels:
-    app: {{ .Values.phpFpm.name }}
+    app: {{ $phpName }}-phpfpm
     tier: backend 
     track: stable 
 spec:
@@ -12,5 +13,5 @@ spec:
       targetPort: fastcgi
       protocol: TCP
   selector: 
-    app: {{ .Values.phpFpm.name }}
+    app: {{ $phpName }}-phpfpm
     tier: backend

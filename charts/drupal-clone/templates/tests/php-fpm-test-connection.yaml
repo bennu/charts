@@ -3,7 +3,7 @@ kind: Pod
 metadata:
   name: "php-fpm-test-connection"
   labels:
-    app: {{ .Values.phpFpm.name }}
+    app: {{ .Values.phpFpm.name }}-phpfpm
     tier: backend
     track: stable
   annotations:

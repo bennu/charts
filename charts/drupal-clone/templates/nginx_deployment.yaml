@@ -1,17 +1,19 @@
+{{- $nginxName := include "drupal-clone.fullname" . -}}
+{{- $phpName := include "drupal-clone.fullname" . -}}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ .Values.nginx.name }}
+  name: {{ .Values.nginx.name }}-nginx-deployment
   annotations:
     "helm.sh/hook-weight": "2"
 spec:
   selector:
     matchLabels:
-      app: {{ .Values.nginx.name }}
+      app: {{ $nginxName }}-nginx
   template:
     metadata:
       labels:
-        app: {{ .Values.nginx.name }}
+        app: {{ $nginxName }}-nginx
         tier: frontend
         track: stable
     spec:
@@ -20,7 +22,7 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       containers:
-      - name: {{ .Values.nginx.name }}
+      - name: {{ $nginxName }}-nginx
         securityContext:
           {{- toYaml .Values.nginx.securityContext | nindent 12 }}
         image: "{{ .Values.nginx.image.repository }}:{{ .Values.nginx.image.tag | default .Chart.AppVersion }}"
@@ -29,7 +31,7 @@ spec:
         - name: WEB_ROOT
           value: /www
         - name: PHP_SERVICE
-          value: {{ .Values.phpFpm.name }}
+          value: {{ $phpName }}-phpfpm-svc
         - name: PHP_SERVICE_PORT
           value: "9000"
         ports:

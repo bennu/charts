@@ -1,17 +1,18 @@
+{{- $phpName := include "drupal-clone.fullname" . -}}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ .Values.phpFpm.name }}
+  name: {{ $phpName }}-phpfpm-deployment
   annotations:
     "helm.sh/hook-weight": "1"
 spec:
   selector:
     matchLabels:
-      app: {{ .Values.phpFpm.name }}
+      app: {{ $phpName }}-phpfpm
   template:
     metadata:
       labels:
-        app: {{ .Values.phpFpm.name }}
+        app: {{ $phpName }}-phpfpm
         tier: backend
         track: stable
     spec:
@@ -20,7 +21,7 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       containers:
-      - name: {{ .Values.phpFpm.name }} 
+      - name: {{ $phpName }}-phpfpm
         image: "{{ .Values.phpFpm.image.repository }}:{{ .Values.phpFpm.image.tag | default .Chart.AppVersion }}"
         imagePullPolicy: {{ .Values.phpFpm.image.pullPolicy }}
         env:
