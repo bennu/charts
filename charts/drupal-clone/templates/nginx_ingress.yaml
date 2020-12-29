@@ -1,5 +1,5 @@
 {{- if .Values.nginx.ingress.enabled -}}
-{{- $hosturl := .Value.nginx.host -}}
+{{- $hosturl := .Values.nginx.host -}}
 {{- $nginxName := include "drupal-clone.fullname" . -}}
 apiVersion: networking.k8s.io/v1
 kind: Ingress
