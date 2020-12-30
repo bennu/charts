@@ -1,4 +1,4 @@
-{{- define "drupal-clomne.name" -}}
+{{- define "drupal-clone.name" -}}
 {{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 

@@ -45,4 +45,4 @@ spec:
       volumes:
         - name: drupal-storage
           persistentVolumeClaim:
-            claimName: {{ .Values.persistenceClaim.name }}
+            claimName: {{ $phpName }}-pvc

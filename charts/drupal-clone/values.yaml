@@ -38,12 +38,11 @@ environment:
   s3BucketSecretName: s3-credentials
 
 
-#This PVC should exist beforehand
 #Tt should be a PVC over a NFS PV
 #or any kind of volume that support
-#Multiples write/read operations
+#Multiple writes and reads
 persistenceClaim:
-  name: drupal-volume-claim
+  memory: 5Gi
 
 #Values example:
 # name: image-pull
