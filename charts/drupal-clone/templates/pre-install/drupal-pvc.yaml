@@ -1,11 +1,16 @@
+{{- if and .Values.persistenceClaim.enabled (not .Values.persistenceClaim.existingClaim) -}}
 {{- $pvcName := include "drupal-clone.fullname" . -}}
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
-  name: {{ $pvcName }}-pvc
+  name: {{ $pvcName }}
+  annotations:
+    "helm.sh/hook": pre-install
+    "helm.sh/hook-weight": "-200" 
 spec:
   accessModes:
     - ReadWriteMany
   resources:
     requests:
       storage: {{ .Values.persistenceClaim.memory }}
+{{- end -}}
