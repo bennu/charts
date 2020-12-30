@@ -9,6 +9,7 @@ metadata:
     app: {{ $nginxName }}-nginx
     tier: frontend
     track: stable
+    {{- include "drupal-clone.metaLabels" . | nindent 4 }}
   {{- with .Values.nginx.ingress.annotations }}
   annotations:
     {{- toYaml . | nindent 4 }}
