@@ -1,7 +1,8 @@
+{{- $postinstallName := include "drupal-clone.fullname" . -}}
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: {{ .Values.jobs.postInstall.name }}-postinstall
+  name: {{ $postinstallName }}-postinstall
   annotations:
     "helm.sh/hook": post-install
     "helm.sh/hook-weight": "100"
@@ -9,7 +10,7 @@ metadata:
 spec:
   template:
     metadata:
-      name: {{ .Values.jobs.postInstall.name }}-postinstall
+      name: {{ $postinstallName }}-postinstall
     spec:
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
@@ -17,7 +18,7 @@ spec:
       {{- end }}
       containers:
       - image: "{{ .Values.jobs.postInstall.image.repository }}:{{ .Values.jobs.postInstall.image.tag }}"
-        name: {{ .Values.jobs.postInstall.name }}-postinstall
+        name: {{ $postinstallName }}-postinstall
         command: ["/bin/bash"]
         args:
           - -c

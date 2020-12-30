@@ -1,7 +1,8 @@
+{{- $preinstallName := include "drupal-clone.fullname" . -}}
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: {{ .Values.jobs.preInstall.name }}-preinstall
+  name: {{ $preinstallName  }}-preinstall
   annotations:
     "helm.sh/hook": pre-install
     "helm.sh/hook-weight": "-100"
@@ -9,7 +10,7 @@ metadata:
 spec:
   template:
     metadata:
-      name: {{ .Values.jobs.preInstall.name }}-preinstall
+      name: {{ $preinstallName }}-preinstall
     spec:
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
@@ -17,7 +18,7 @@ spec:
       {{- end }}
       containers:
         - image: "{{ .Values.jobs.preInstall.image.repository }}:{{ .Values.jobs.preInstall.image.tag }}"
-          name: {{ .Values.jobs.preInstall.name }}-preinstall
+          name: {{ $preinstallName }}-preinstall
           command: ["/bin/bash"]
           args:
             - -c
