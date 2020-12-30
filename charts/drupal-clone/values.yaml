@@ -17,7 +17,7 @@ externalDatabase:
 
 environment:
   #Url for s3 or any compatible bucket
-  s3Bucket: https://my.minio.test
+  s3Bucket: https://my.s3.test
   #Router for user files dump inside minio
   #Ex: bucket-example/folder/to/assets
   assetsRoute:
@@ -35,7 +35,7 @@ environment:
   #The secret should exist beforehand
   #The secret should be a basic-auth type
   #or contain username and password fields
-  s3BucketSecretName: minio-credentials
+  s3BucketSecretName: s3-credentials
 
 
 #This PVC should exist beforehand

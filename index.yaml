@@ -3,7 +3,17 @@ entries:
   drupal-clone:
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2020-12-30T10:38:59.261126187-03:00"
+    created: "2020-12-30T12:42:20.16500553-03:00"
+    description: Drupal clone
+    digest: 721324be731a38a05b249fe1ae93e793c27c923a8d2a539c9c94eb9c6d0ee26f
+    name: drupal-clone
+    type: application
+    urls:
+    - https://charts.bennu.cl/drupal-clone-1.0.1.tgz
+    version: 1.0.1
+  - apiVersion: v2
+    appVersion: 1.16.0
+    created: "2020-12-30T12:42:20.163613031-03:00"
     description: Drupal clone
     digest: df09f536e2f0f2b41e76e9166869439f37dc7653d8681310597147dd6f740dd5
     name: drupal-clone
@@ -13,7 +23,7 @@ entries:
     version: 1.0.0
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2020-12-30T10:38:59.258994853-03:00"
+    created: "2020-12-30T12:42:20.162280176-03:00"
     description: Drupal clone
     digest: dd165df3126ccab119570dfcb2c03b58eb44bb9531f1c2fd19821267afb5c3df
     name: drupal-clone
@@ -24,7 +34,7 @@ entries:
   konga:
   - apiVersion: v1
     appVersion: 0.14.9
-    created: "2020-12-30T10:38:59.263490642-03:00"
+    created: "2020-12-30T12:42:20.167610517-03:00"
     description: Kong helm chart
     digest: ec839c9cda20db97b693a927066a6bb1814398e3dbdd440ff1a8be5b1d4e9854
     name: konga
@@ -33,7 +43,7 @@ entries:
     version: 1.0.2
   - apiVersion: v1
     appVersion: 0.14.9
-    created: "2020-12-30T10:38:59.266825541-03:00"
+    created: "2020-12-30T12:42:20.171362766-03:00"
     description: Kong helm chart
     digest: 38501a83971e03f47a4c2d049e8814d7abda8f5b6c3285f5f7a7e9ad979f4816
     name: konga
@@ -42,11 +52,11 @@ entries:
     version: 1.0.1
   - apiVersion: v1
     appVersion: "1.0"
-    created: "2020-12-30T10:38:59.265163593-03:00"
+    created: "2020-12-30T12:42:20.169264298-03:00"
     description: A Helm chart for Kubernetes
     digest: 7a86b10611be170bb9bda34cac62a78b9aa501de9d44dd8e965144297757b1f1
     name: konga
     urls:
     - https://charts.bennu.cl/konga-1.0.0.tgz
     version: 1.0.0
-generated: "2020-12-30T10:38:59.257394324-03:00"
+generated: "2020-12-30T12:42:20.16052772-03:00"
