@@ -38,11 +38,13 @@ environment:
   s3BucketSecretName: s3-credentials
 
 
-#Tt should be a PVC over a NFS PV
+#This should be a PVC over a NFS PV
 #or any kind of volume that support
 #Multiple writes and reads
 persistenceClaim:
+  enabled: true
   memory: 5Gi
+  existingClaim: 
 
 #Values example:
 # name: image-pull

@@ -45,4 +45,4 @@ spec:
       volumes:
         - name: drupal-storage
           persistentVolumeClaim:
-            claimName: {{ $phpName }}-pvc
+            claimName: {{ .Values.persistenceClaim.existingClaim | default (printf "%s" (include "drupal-clone.fullname" .))  }}
