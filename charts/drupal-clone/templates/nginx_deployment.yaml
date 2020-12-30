@@ -6,6 +6,8 @@ metadata:
   name: {{ $nginxName }}-nginx-deployment
   annotations:
     "helm.sh/hook-weight": "2"
+  labels:
+    {{- include "drupal-clone.metaLabels" . | nindent 4 }}
 spec:
   selector:
     matchLabels:

@@ -7,6 +7,8 @@ metadata:
     "helm.sh/hook": post-install
     "helm.sh/hook-weight": "100"
     "helm.sh/hook-delete-policy": before-hook-creation ,hook-success
+  labels:
+    {{- include "drupal-clone.metaLabels" . | nindent 4 }}
 spec:
   template:
     metadata:
