@@ -25,7 +25,7 @@ spec:
         args:
           - -c
           - >-
-        {{- if .Values.jobs.gitInstallation.enabled }}
+        {{- if eq .Values.codeProvider.name "git" }}
             cp -a ../configmap/. web/sites/default/ &&
             tar -zxf ${ASSETS_FILENAME} &&
             rm ${ASSETS_FILENAME} &&
@@ -36,12 +36,14 @@ spec:
             ../vendor/drush/drush/drush cr &&
             cd .. &&
             chown -R www-data:www-data web/
-        {{- else }}
+        {{- end }}
+        {{- if eq .Values.codeProvider.name "s3" }}
             tar -zxf ${ASSETS_FILENAME} &&
             tar -zxf ${CUSTOMSITE_FILENAME} &&
             rm ${ASSETS_FILENAME} && 
             rm ${CUSTOMSITE_FILENAME} &&
             mv -v files/ web/sites/default/ &&
+            cp -a ../configmap/. web/sites/default/ &&
             composer self-update --1 &&
             composer install &&
             cd web/ &&
@@ -68,24 +70,20 @@ spec:
         - name: DB_NAME
           value: {{ .Values.externalDatabase.name }}
         - name: ASSETS_FILENAME
-          value: {{ .Values.environment.assetsFileName }}
+          value: {{ .Values.codeProvider.assetsFileName }}
         - name: CUSTOMSITE_FILENAME
-          value: {{ .Values.environment.customSiteFileName }} 
+          value: {{ .Values.codeProvider.customSiteFileName }} 
         volumeMounts:
         - mountPath: /www
           name: drupal-storage
           readOnly: false
-          {{- if .Values.jobs.gitInstallation.enabled }}
         - mountPath: /configmap
           name: settings-configmap
-          {{- end }}
       restartPolicy: Never
       volumes:
-        {{- if .Values.jobs.gitInstallation.enabled }}
         - name: settings-configmap
           configMap:
             name: {{ .Values.jobs.postInstall.settingsConfigMap }} 
-        {{- end }}
         - name: drupal-storage
           persistentVolumeClaim:
             claimName: {{ .Values.persistenceClaim.existingClaim | default (printf "%s" (include "drupal-clone.fullname" .))  }} 

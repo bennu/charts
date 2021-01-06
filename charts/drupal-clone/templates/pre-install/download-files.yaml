@@ -25,17 +25,20 @@ spec:
           args:
             - -c
             - >-
-          {{- if .Values.jobs.gitInstallation.enabled }} 
+          {{- if eq .Values.codeProvider.name "git" }} 
               mc alias set s3_bucket ${S3_URL} ${S3_USER} ${S3_PASS} &&
               git config --global http.sslVerify false && 
               git clone -b ${PROJECT_BRANCH} https://${PROJECT_USER}:${PROJECT_PASSWORD}@${PROJECT_PATH} &&
               cd ${PROJECT_NAME} &&
+          {{- if .Values.codeProvider.commitHash }}
               git reset --hard ${COMMIT_HASH} &&
+          {{- end }}
               rm -rf .git &&
               mv * ../www && cd .. && cd www/ &&
               mc cp s3_bucket/${ASSETS_ROUTE}/${ASSETS_FILENAME} . &&
               mv config web/sites/
-          {{- else }}
+          {{- end }}
+          {{- if eq .Values.codeProvider.name "s3" }}
               cd www/ &&
               mc alias set s3_bucket ${S3_URL} ${S3_USER} ${S3_PASS} &&
               mc cp s3_bucket/${ASSETS_ROUTE}/${ASSETS_FILENAME} . &&
@@ -48,36 +51,48 @@ spec:
               readOnly: false
           env:
             - name: S3_URL
-              value: {{ .Values.environment.s3Bucket }}
+              value: {{ .Values.codeProvider.s3Bucket }}
             - name: S3_USER
               valueFrom:
                 secretKeyRef:
-                  name: {{ .Values.environment.s3BucketSecretName}}
+                  name: {{ .Values.codeProvider.s3BucketSecretName}}
                   key: username
             - name: S3_PASS
               valueFrom:
                 secretKeyRef:
-                  name: {{ .Values.environment.s3BucketSecretName }}
+                  name: {{ .Values.codeProvider.s3BucketSecretName }}
                   key: password
             - name: ASSETS_ROUTE
-              value: {{ .Values.environment.assetsRoute }}
-            - name: CUSTOMSITE_ROUTE
-              value: {{ .Values.environment.customSiteRoute }} 
+              value: {{ .Values.codeProvider.assetsRoute }}
             - name: ASSETS_FILENAME
-              value: {{ .Values.environment.assetsFileName }}
+              value: {{ .Values.codeProvider.assetsFileName }}
+            {{- if eq .Values.codeProvider.name "s3" }}
+            - name: CUSTOMSITE_ROUTE
+              value: {{ .Values.codeProvider.customSiteRoute }} 
             - name: CUSTOMSITE_FILENAME
-              value: {{ .Values.environment.customSiteFileName }} 
-            {{- if .Values.jobs.gitInstallation.enabled }}
+              value: {{ .Values.codeProvider.customSiteFileName }}
+            {{- end }} 
+            {{- if eq .Values.codeProvider.name "git"  }}
             - name: PROJECT_NAME
-              value: {{ .Values.jobs.gitInstallation.name }}
+              value: {{ .Values.codeProvider.gitRepoName }}
             - name: PROJECT_USER
-              value: {{ .Values.jobs.gitInstallation.user }}
+              valueFrom:
+                secretKeyRef:
+                  name:  {{ .Values.codeProvider.gitSecretName }}
+                  key: username
             - name: PROJECT_PASSWORD
-              value: {{ .Values.jobs.gitInstallation.password }}
+              valueFrom:
+                secretKeyRef:
+                  name:  {{ .Values.codeProvider.gitSecretName }}
+                  key: password
             - name: PROJECT_PATH
-              value: {{ .Values.jobs.gitInstallation.url }}
+              value: {{ .Values.codeProvider.gitRepo }}
             - name: PROJECT_BRANCH
-              value: {{ .Values.jobs.gitInstallation.branch }}
+              value: {{ .Values.codeProvider.gitBranch }}
+            {{- if .Values.codeProvider.commitHash }}
+            - name: COMMIT_HASH
+              value: {{ .Values.codeProvider.commitHash }}
+            {{- end }}
             {{- end }}
       restartPolicy: Never
       volumes:
