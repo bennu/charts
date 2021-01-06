@@ -24,7 +24,19 @@ spec:
         command: ["/bin/bash"]
         args:
           - -c
-          - >- 
+          - >-
+        {{- if .Values.jobs.gitInstallation.enabled }}
+            cp -a ../configmap/. web/sites/default/ &&
+            tar -zxf ${ASSETS_FILENAME} &&
+            rm ${ASSETS_FILENAME} &&
+            mv -v files/ web/sites/default &&
+            composer self-update --1 &&
+            composer install &&
+            cd web/ &&
+            ../vendor/drush/drush/drush cr &&
+            cd .. &&
+            chown -R www-data:www-data web/
+        {{- else }}
             tar -zxf ${ASSETS_FILENAME} &&
             tar -zxf ${CUSTOMSITE_FILENAME} &&
             rm ${ASSETS_FILENAME} && 
@@ -36,6 +48,7 @@ spec:
             ../vendor/drush/drush/drush cr &&
             cd .. && 
             chown -R www-data:www-data web/ 
+        {{- end }}
         imagePullPolicy: {{ .Values.jobs.postInstall.image.pullPolicy }}
         env:
         - name: DB_USER
@@ -62,8 +75,17 @@ spec:
         - mountPath: /www
           name: drupal-storage
           readOnly: false
+          {{- if .Values.jobs.gitInstallation.enabled }}
+        - mountPath: /configmap
+          name: settings-configmap
+          {{- end }}
       restartPolicy: Never
       volumes:
+        {{- if .Values.jobs.gitInstallation.enabled }}
+        - name: settings-configmap
+          configMap:
+            name: {{ .Values.jobs.postInstall.settingsConfigMap }} 
+        {{- end }}
         - name: drupal-storage
           persistentVolumeClaim:
             claimName: {{ .Values.persistenceClaim.existingClaim | default (printf "%s" (include "drupal-clone.fullname" .))  }} 

@@ -52,6 +52,13 @@ imagePullSecrets: []
 
 #Jobs parameters
 jobs:
+  gitInstallation:
+    enabled: false
+    name:
+    user:
+    password:
+    #URL to clone repository (without https://)
+    url:
   #This job execute before php-fpm and nginx deployment
   preInstall:
     name: files-drupal
@@ -61,6 +68,7 @@ jobs:
       pullPolicy: IfNotPresent
   #This job execute after php-fpm and nginx deployment
   postInstall:
+    settingsConfigMap: 
     name: migration-drupal
     image:
       repository: bennu/php-cli
