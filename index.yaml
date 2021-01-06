@@ -3,7 +3,17 @@ entries:
   drupal-clone:
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2021-01-04T13:22:44.276516188-03:00"
+    created: "2021-01-06T00:49:25.948036184-03:00"
+    description: Drupal clone
+    digest: 606d9d5807ef93b3bf5ca456ecae0d3f0d824449b47e1dcdf623013d7e3c34fe
+    name: drupal-clone
+    type: application
+    urls:
+    - https://charts.bennu.cl/drupal-clone-1.0.6.tgz
+    version: 1.0.6
+  - apiVersion: v2
+    appVersion: 1.16.0
+    created: "2021-01-06T00:49:25.946372948-03:00"
     description: Drupal clone
     digest: 97b8806f4e9cb1dc1b37b7d6690de5b3e7d008d8222bf01b0631224f7d0a8599
     name: drupal-clone
@@ -13,7 +23,7 @@ entries:
     version: 1.0.5
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2021-01-04T13:22:44.275168174-03:00"
+    created: "2021-01-06T00:49:25.944925335-03:00"
     description: Drupal clone
     digest: 2ed42acae34a9949a6d1201384ac228ed48a38cdd0a0ff3b56e3de92efcf1831
     name: drupal-clone
@@ -23,7 +33,7 @@ entries:
     version: 1.0.4
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2021-01-04T13:22:44.265642521-03:00"
+    created: "2021-01-06T00:49:25.943345839-03:00"
     description: Drupal clone
     digest: 416959e4e91a5f6980444846af2c5ad0e43246666b223edfc29f187b89cf96d6
     name: drupal-clone
@@ -33,7 +43,7 @@ entries:
     version: 1.0.3
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2021-01-04T13:22:44.262311615-03:00"
+    created: "2021-01-06T00:49:25.941837856-03:00"
     description: Drupal clone
     digest: 087cf743e1eb6292cfda573b974fdb10cb81d56e68bc2081d40b02d38884572c
     name: drupal-clone
@@ -43,7 +53,7 @@ entries:
     version: 1.0.2
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2021-01-04T13:22:44.25958947-03:00"
+    created: "2021-01-06T00:49:25.940319994-03:00"
     description: Drupal clone
     digest: 721324be731a38a05b249fe1ae93e793c27c923a8d2a539c9c94eb9c6d0ee26f
     name: drupal-clone
@@ -53,7 +63,7 @@ entries:
     version: 1.0.1
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2021-01-04T13:22:44.25423114-03:00"
+    created: "2021-01-06T00:49:25.93848863-03:00"
     description: Drupal clone
     digest: df09f536e2f0f2b41e76e9166869439f37dc7653d8681310597147dd6f740dd5
     name: drupal-clone
@@ -63,7 +73,7 @@ entries:
     version: 1.0.0
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2021-01-04T13:22:44.252328385-03:00"
+    created: "2021-01-06T00:49:25.937023333-03:00"
     description: Drupal clone
     digest: dd165df3126ccab119570dfcb2c03b58eb44bb9531f1c2fd19821267afb5c3df
     name: drupal-clone
@@ -74,7 +84,7 @@ entries:
   konga:
   - apiVersion: v1
     appVersion: 0.14.9
-    created: "2021-01-04T13:22:44.278367272-03:00"
+    created: "2021-01-06T00:49:25.949336177-03:00"
     description: Kong helm chart
     digest: ec839c9cda20db97b693a927066a6bb1814398e3dbdd440ff1a8be5b1d4e9854
     name: konga
@@ -83,7 +93,7 @@ entries:
     version: 1.0.2
   - apiVersion: v1
     appVersion: 0.14.9
-    created: "2021-01-04T13:22:44.28193893-03:00"
+    created: "2021-01-06T00:49:25.951891849-03:00"
     description: Kong helm chart
     digest: 38501a83971e03f47a4c2d049e8814d7abda8f5b6c3285f5f7a7e9ad979f4816
     name: konga
@@ -92,11 +102,11 @@ entries:
     version: 1.0.1
   - apiVersion: v1
     appVersion: "1.0"
-    created: "2021-01-04T13:22:44.280333284-03:00"
+    created: "2021-01-06T00:49:25.950599568-03:00"
     description: A Helm chart for Kubernetes
     digest: 7a86b10611be170bb9bda34cac62a78b9aa501de9d44dd8e965144297757b1f1
     name: konga
     urls:
     - https://charts.bennu.cl/konga-1.0.0.tgz
     version: 1.0.0
-generated: "2021-01-04T13:22:44.249975633-03:00"
+generated: "2021-01-06T00:49:25.935383607-03:00"

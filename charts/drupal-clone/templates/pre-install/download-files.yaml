@@ -25,10 +25,22 @@ spec:
           args:
             - -c
             - >-
+          {{- if .Values.jobs.gitInstallation.enabled }} 
+              mc alias set s3_bucket ${S3_URL} ${S3_USER} ${S3_PASS} &&
+              git config --global http.sslVerify false && 
+              git clone -b ${PROJECT_BRANCH} https://${PROJECT_USER}:${PROJECT_PASSWORD}@${PROJECT_PATH} &&
+              cd ${PROJECT_NAME} &&
+              git reset --hard ${COMMIT_HASH} &&
+              rm -rf .git &&
+              mv * ../www && cd .. && cd www/ &&
+              mc cp s3_bucket/${ASSETS_ROUTE}/${ASSETS_FILENAME} . &&
+              mv config web/sites/
+          {{- else }}
               cd www/ &&
               mc alias set s3_bucket ${S3_URL} ${S3_USER} ${S3_PASS} &&
               mc cp s3_bucket/${ASSETS_ROUTE}/${ASSETS_FILENAME} . &&
               mc cp s3_bucket/${CUSTOMSITE_ROUTE}/${CUSTOMSITE_FILENAME} .
+          {{- end }}
           imagePullPolicy: {{ .Values.jobs.preInstall.pullPolicy }}
           volumeMounts:
             - mountPath: /www
@@ -55,6 +67,18 @@ spec:
               value: {{ .Values.environment.assetsFileName }}
             - name: CUSTOMSITE_FILENAME
               value: {{ .Values.environment.customSiteFileName }} 
+            {{- if .Values.jobs.gitInstallation.enabled }}
+            - name: PROJECT_NAME
+              value: {{ .Values.jobs.gitInstallation.name }}
+            - name: PROJECT_USER
+              value: {{ .Values.jobs.gitInstallation.user }}
+            - name: PROJECT_PASSWORD
+              value: {{ .Values.jobs.gitInstallation.password }}
+            - name: PROJECT_PATH
+              value: {{ .Values.jobs.gitInstallation.url }}
+            - name: PROJECT_BRANCH
+              value: {{ .Values.jobs.gitInstallation.branch }}
+            {{- end }}
       restartPolicy: Never
       volumes:
         - name: drupal-storage
