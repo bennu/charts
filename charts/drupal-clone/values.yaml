@@ -15,15 +15,18 @@ externalDatabase:
   #or contain username and password fields
   secretName: mysql-credentials
 
-environment:
+codeProvider:
+  #S3 or Git
+  name: 
+  ##### S3
   #Url for s3 or any compatible bucket
   s3Bucket: https://my.s3.test
   #Router for user files dump inside minio
   #Ex: bucket-example/folder/to/assets
-  assetsRoute:
+  assetsRoute: 
   #Router for drupal site dump inside minio
   #Ex: bucket-example/folder/to/customsite
-  customSiteRoute:
+  customSiteRoute: 
   #Should match filesRoute tar.gz filename
   #Ex: exameple-userfiles.tar.gz
   #NOTE: inside this tar.gz file should be
@@ -31,11 +34,23 @@ environment:
   assetsFileName: 
   #Should match site tar.gz filename
   #Ex: example-demo-site.tar.gz
-  customSiteFileName: 
+  customSiteFileName:
   #The secret should exist beforehand
   #The secret should be a basic-auth type
   #or contain username and password fields
   s3BucketSecretName: s3-credentials
+  #$$$$$ GIT
+  #Name of the git repository
+  gitRepoName: 
+  #URL repo repositry to clone (without https://)
+  gitRepo: 
+  gitBranch: 
+  #The secret should exist beforehand
+  #The secret should be a basic-auth type
+  #or contain username and password fields
+  gitSecretName: git-secret
+  #Hash of the specific commit to clone (optional)
+  commitHash:
 
 
 #This should be a PVC over a NFS PV
@@ -52,13 +67,6 @@ imagePullSecrets: []
 
 #Jobs parameters
 jobs:
-  gitInstallation:
-    enabled: false
-    name:
-    user:
-    password:
-    #URL to clone repository (without https://)
-    url:
   #This job execute before php-fpm and nginx deployment
   preInstall:
     name: files-drupal
