@@ -3,9 +3,9 @@ entries:
   drupal-clone:
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2021-01-06T18:31:44.078686401-03:00"
+    created: "2021-01-06T22:08:18.639322488-03:00"
     description: Drupal clone
-    digest: 6820d164965313598f33daf03fe595bb03fa64389c975becb75c7425e749e3cd
+    digest: 2d58cade36317ed97a849461fdf268ebca4eabefd779b667c2cd46d35e287ae0
     name: drupal-clone
     type: application
     urls:
@@ -13,7 +13,7 @@ entries:
     version: 1.0.7
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2021-01-06T18:31:44.077210396-03:00"
+    created: "2021-01-06T22:08:18.637790345-03:00"
     description: Drupal clone
     digest: 606d9d5807ef93b3bf5ca456ecae0d3f0d824449b47e1dcdf623013d7e3c34fe
     name: drupal-clone
@@ -23,7 +23,7 @@ entries:
     version: 1.0.6
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2021-01-06T18:31:44.075591213-03:00"
+    created: "2021-01-06T22:08:18.636223762-03:00"
     description: Drupal clone
     digest: 97b8806f4e9cb1dc1b37b7d6690de5b3e7d008d8222bf01b0631224f7d0a8599
     name: drupal-clone
@@ -33,7 +33,7 @@ entries:
     version: 1.0.5
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2021-01-06T18:31:44.074068621-03:00"
+    created: "2021-01-06T22:08:18.634798134-03:00"
     description: Drupal clone
     digest: 2ed42acae34a9949a6d1201384ac228ed48a38cdd0a0ff3b56e3de92efcf1831
     name: drupal-clone
@@ -43,7 +43,7 @@ entries:
     version: 1.0.4
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2021-01-06T18:31:44.072684026-03:00"
+    created: "2021-01-06T22:08:18.633401827-03:00"
     description: Drupal clone
     digest: 416959e4e91a5f6980444846af2c5ad0e43246666b223edfc29f187b89cf96d6
     name: drupal-clone
@@ -53,7 +53,7 @@ entries:
     version: 1.0.3
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2021-01-06T18:31:44.071085901-03:00"
+    created: "2021-01-06T22:08:18.631514214-03:00"
     description: Drupal clone
     digest: 087cf743e1eb6292cfda573b974fdb10cb81d56e68bc2081d40b02d38884572c
     name: drupal-clone
@@ -63,7 +63,7 @@ entries:
     version: 1.0.2
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2021-01-06T18:31:44.067985842-03:00"
+    created: "2021-01-06T22:08:18.628976098-03:00"
     description: Drupal clone
     digest: 721324be731a38a05b249fe1ae93e793c27c923a8d2a539c9c94eb9c6d0ee26f
     name: drupal-clone
@@ -73,7 +73,7 @@ entries:
     version: 1.0.1
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2021-01-06T18:31:44.06598097-03:00"
+    created: "2021-01-06T22:08:18.623730134-03:00"
     description: Drupal clone
     digest: df09f536e2f0f2b41e76e9166869439f37dc7653d8681310597147dd6f740dd5
     name: drupal-clone
@@ -83,7 +83,7 @@ entries:
     version: 1.0.0
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2021-01-06T18:31:44.063970192-03:00"
+    created: "2021-01-06T22:08:18.622356804-03:00"
     description: Drupal clone
     digest: dd165df3126ccab119570dfcb2c03b58eb44bb9531f1c2fd19821267afb5c3df
     name: drupal-clone
@@ -94,7 +94,7 @@ entries:
   konga:
   - apiVersion: v1
     appVersion: 0.14.9
-    created: "2021-01-06T18:31:44.079917528-03:00"
+    created: "2021-01-06T22:08:18.640448164-03:00"
     description: Kong helm chart
     digest: ec839c9cda20db97b693a927066a6bb1814398e3dbdd440ff1a8be5b1d4e9854
     name: konga
@@ -103,7 +103,7 @@ entries:
     version: 1.0.2
   - apiVersion: v1
     appVersion: 0.14.9
-    created: "2021-01-06T18:31:44.082306547-03:00"
+    created: "2021-01-06T22:08:18.642799467-03:00"
     description: Kong helm chart
     digest: 38501a83971e03f47a4c2d049e8814d7abda8f5b6c3285f5f7a7e9ad979f4816
     name: konga
@@ -112,11 +112,11 @@ entries:
     version: 1.0.1
   - apiVersion: v1
     appVersion: "1.0"
-    created: "2021-01-06T18:31:44.081154219-03:00"
+    created: "2021-01-06T22:08:18.641660389-03:00"
     description: A Helm chart for Kubernetes
     digest: 7a86b10611be170bb9bda34cac62a78b9aa501de9d44dd8e965144297757b1f1
     name: konga
     urls:
     - https://charts.bennu.cl/konga-1.0.0.tgz
     version: 1.0.0
-generated: "2021-01-06T18:31:44.062348883-03:00"
+generated: "2021-01-06T22:08:18.620804144-03:00"
