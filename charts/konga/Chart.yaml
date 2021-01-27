@@ -2,4 +2,4 @@ apiVersion: v1
 appVersion: "0.14.9"
 description: Kong helm chart
 name: konga
-version: 1.0.2
+version: 1.0.3
